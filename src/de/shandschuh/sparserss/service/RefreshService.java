@@ -37,9 +37,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import de.shandschuh.sparserss.Strings;
 
-public class RefreshService extends Service {   
-	private static final String SIXTYMINUTES = "3600000";
-	
+public class RefreshService extends Service {
     private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
 		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 			if (Strings.SETTINGS_REFRESHINTERVAL.equals(key)) {
@@ -99,7 +97,7 @@ public class RefreshService extends Service {
 		int time = 3600000;
 		
 		try {
-			time = Math.max(60000, Integer.parseInt(preferences.getString(Strings.SETTINGS_REFRESHINTERVAL, SIXTYMINUTES)));
+			time = Math.max(60000, Integer.parseInt(preferences.getString(Strings.SETTINGS_REFRESHINTERVAL, Strings.SIXTYMINUTES)));
 		} catch (Exception exception) {
 
 		}

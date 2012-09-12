@@ -116,9 +116,20 @@ public class FetcherService extends IntentService {
 		}
 		
 		if (intent.getBooleanExtra(Strings.SCHEDULED, false)) {
-			SharedPreferences.Editor editor = preferences.edit();
-			editor.putLong(Strings.PREFERENCE_LASTSCHEDULEDREFRESH, SystemClock.elapsedRealtime());
-			editor.commit();
+			long lastScheduledRefresh = preferences.getLong(Strings.PREFERENCE_LASTSCHEDULEDREFRESH, 0);
+			
+			/* subtract additional 10 seconds buffer */
+			if (lastScheduledRefresh == 0 || lastScheduledRefresh > 0 && lastScheduledRefresh+Integer.parseInt(preferences.getString(Strings.SETTINGS_REFRESHINTERVAL, Strings.SIXTYMINUTES))-10000 <= SystemClock.elapsedRealtime()) {
+				SharedPreferences.Editor editor = preferences.edit();
+				
+				editor.putLong(Strings.PREFERENCE_LASTSCHEDULEDREFRESH, SystemClock.elapsedRealtime());
+				editor.commit();
+			} else {
+				// we should not yet refresh - abort and restart the service as it seems to be out of time
+				stopService(new Intent(this, RefreshService.class));
+				startService(new Intent(this, RefreshService.class));
+				return;
+			}
 		}
 		
 		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
