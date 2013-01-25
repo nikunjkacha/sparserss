@@ -4,4 +4,6 @@
     android:minHeight="147dp"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/homescreenwidget"
+    android:minResizeHeight="70dp"
+    android:resizeMode="vertical"
     android:configure="de.shandschuh.sparserss.widget.WidgetConfigActivity"/>
