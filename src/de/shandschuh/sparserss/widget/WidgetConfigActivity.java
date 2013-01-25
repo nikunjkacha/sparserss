@@ -55,17 +55,17 @@ public class WidgetConfigActivity extends PreferenceActivity {
 		
 		if (extras != null) {
 			widgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-        }
-        if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish();
-        }
-        addPreferencesFromResource(R.layout.widgetpreferences);
-        setContentView(R.layout.widgetconfig);
-        
-        final ListPreference entryCountPreference = (ListPreference) findPreference("widget.entrycount");
-        
-        final PreferenceCategory feedsPreferenceCategory = (PreferenceCategory) findPreference("widget.visiblefeeds");
-        
+		}
+		if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+			finish();
+		}
+		addPreferencesFromResource(R.layout.widgetpreferences);
+		setContentView(R.layout.widgetconfig);
+		
+		final ListPreference entryCountPreference = (ListPreference) findPreference("widget.entrycount");
+		
+		final PreferenceCategory feedsPreferenceCategory = (PreferenceCategory) findPreference("widget.visiblefeeds");
+		
 		
 		Cursor cursor = this.getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, new String[] {FeedData.FeedColumns._ID, NAMECOLUMN}, null, null, null);
 		
@@ -87,7 +87,7 @@ public class WidgetConfigActivity extends PreferenceActivity {
 				feedsPreferenceCategory.addPreference(checkboxPreference);
 				checkboxPreference.setDependency(ZERO);
 			}
-			cursor.close();			
+			cursor.close();
 			
 			findViewById(R.id.save_button).setOnClickListener(new OnClickListener() {
 				public void onClick(View view) {
@@ -122,7 +122,7 @@ public class WidgetConfigActivity extends PreferenceActivity {
 					preferences.putString(widgetId+".entrycount", entryCount);
 					
 					int color = getPreferenceManager().getSharedPreferences().getInt("widget.background", SparseRSSAppWidgetProvider.STANDARD_BACKGROUND);
-
+					
 					preferences.putInt(widgetId+".background", color);
 					preferences.commit();
 					
@@ -137,6 +137,5 @@ public class WidgetConfigActivity extends PreferenceActivity {
 			setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
 		}
 	}
-	
 	
 }
