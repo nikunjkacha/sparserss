@@ -64,7 +64,7 @@ public class EntriesListActivity extends ListActivity {
 	public static final String EXTRA_SHOWREAD = "show_read";
 	
 	public static final String EXTRA_SHOWFEEDINFO = "show_feedinfo";
-
+	
 	public static final String EXTRA_AUTORELOAD = "autoreload";
 	
 	private static final String[] FEED_PROJECTION = {FeedData.FeedColumns.NAME,
@@ -103,24 +103,24 @@ public class EntriesListActivity extends ListActivity {
 			}
 			cursor.close();
 		}
-
+		
 		if (!MainTabActivity.POSTGINGERBREAD && iconBytes != null && iconBytes.length > 0) { // we cannot insert the icon here because it would be overwritten, but we have to reserve the icon here
 			if (!requestWindowFeature(Window.FEATURE_LEFT_ICON)) {
 				iconBytes = null;
 			}
 		}
-        
+		
 		setContentView(R.layout.entries);
 		
 		uri = intent.getData();
 		
 		entriesListAdapter = new EntriesListAdapter(this, uri, intent.getBooleanExtra(EXTRA_SHOWFEEDINFO, false), intent.getBooleanExtra(EXTRA_AUTORELOAD, false));
-        setListAdapter(entriesListAdapter);
-        
-        if (title != null) {
-        	setTitle(title);
-        }
-        if (iconBytes != null && iconBytes.length > 0) {
+		setListAdapter(entriesListAdapter);
+		
+		if (title != null) {
+			setTitle(title);
+		}
+		if (iconBytes != null && iconBytes.length > 0) {
 			int bitmapSizeInDip = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, getResources().getDisplayMetrics());
 			Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
 			if (bitmap != null) {
@@ -128,18 +128,18 @@ public class EntriesListActivity extends ListActivity {
 					bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
 				}
 				
-	        	if (MainTabActivity.POSTGINGERBREAD) {
+				if (MainTabActivity.POSTGINGERBREAD) {
 					CompatibilityHelper.setActionBarDrawable(this, new BitmapDrawable(bitmap));
-	        	} else {
+				} else {
 					setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(bitmap));
-	        	}
+				}
 			}
-        }
-        if (RSSOverview.notificationManager != null) {
-        	RSSOverview.notificationManager.cancel(0);
-        }
-        
-        getListView().setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+		}
+		if (RSSOverview.notificationManager != null) {
+			RSSOverview.notificationManager.cancel(0);
+		}
+		
+		getListView().setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 			public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
 				menu.setHeaderTitle(((TextView) ((AdapterView.AdapterContextMenuInfo) menuInfo).targetView.findViewById(android.R.id.text1)).getText());
 				menu.add(0, CONTEXTMENU_MARKASREAD_ID, Menu.NONE, R.string.contextmenu_markasread).setIcon(android.R.drawable.ic_menu_manage);
@@ -147,9 +147,9 @@ public class EntriesListActivity extends ListActivity {
 				menu.add(0, CONTEXTMENU_DELETE_ID, Menu.NONE, R.string.contextmenu_delete).setIcon(android.R.drawable.ic_menu_delete);
 				menu.add(0, CONTEXTMENU_COPYURL, Menu.NONE, R.string.contextmenu_copyurl).setIcon(android.R.drawable.ic_menu_share);
 			}
-        });
+		});
 	}
-
+	
 	@Override
 	protected void onListItemClick(ListView listView, View view, int position, long id) {
 		TextView textView = (TextView) view.findViewById(android.R.id.text1);
@@ -166,13 +166,13 @@ public class EntriesListActivity extends ListActivity {
 		getMenuInflater().inflate(R.menu.entrylist, menu);
 		return true;
 	}
-
+	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.setGroupVisible(R.id.menu_group_0, entriesListAdapter.getCount() > 0);
 		return true;
 	}
-
+	
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_markasread: {
@@ -226,8 +226,8 @@ public class EntriesListActivity extends ListActivity {
 				builder.setTitle(R.string.contextmenu_deleteallentries);
 				builder.setMessage(R.string.question_areyousure);
 				builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-		            public void onClick(DialogInterface dialog, int which) {
-		            	new Thread() {
+					public void onClick(DialogInterface dialog, int which) {
+						new Thread() {
 							public void run() {
 								getContentResolver().delete(uri, Strings.DB_EXCUDEFAVORITE, null);
 								runOnUiThread(new Runnable() {
@@ -237,8 +237,8 @@ public class EntriesListActivity extends ListActivity {
 								});
 							}
 						}.start();
-		            }
-		        });
+					}
+				});
 				builder.setNegativeButton(android.R.string.no, null);
 				builder.show();
 				break;
@@ -275,3 +275,4 @@ public class EntriesListActivity extends ListActivity {
 	}
 	
 }
+

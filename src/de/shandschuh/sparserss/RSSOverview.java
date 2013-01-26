@@ -102,21 +102,21 @@ public class RSSOverview extends ListActivity {
 	
 	private RSSOverviewListAdapter listAdapter;
 	
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-    	if (MainTabActivity.isLightTheme(this)) {
-    		setTheme(R.style.Theme_Light);
-    	}
-        super.onCreate(savedInstanceState);
-
-    	if (notificationManager == null) {
-        	notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        }
-        setContentView(R.layout.main);
-        listAdapter = new RSSOverviewListAdapter(this);
-        setListAdapter(listAdapter);
-        getListView().setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		if (MainTabActivity.isLightTheme(this)) {
+			setTheme(R.style.Theme_Light);
+		}
+		super.onCreate(savedInstanceState);
+		
+		if (notificationManager == null) {
+		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		}
+		setContentView(R.layout.main);
+		listAdapter = new RSSOverviewListAdapter(this);
+		setListAdapter(listAdapter);
+		getListView().setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 			public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
 				menu.setHeaderTitle(((TextView) ((AdapterView.AdapterContextMenuInfo) menuInfo).targetView.findViewById(android.R.id.text1)).getText());
 				menu.add(0, CONTEXTMENU_REFRESH_ID, Menu.NONE, R.string.contextmenu_refresh);
@@ -128,20 +128,20 @@ public class RSSOverview extends ListActivity {
 				menu.add(0, CONTEXTMENU_RESETUPDATEDATE_ID, Menu.NONE, R.string.contextmenu_resetupdatedate);
 				menu.add(0, CONTEXTMENU_DELETE_ID, Menu.NONE, R.string.contextmenu_delete);
 			}
-        });
-        getListView().setOnTouchListener(new OnTouchListener() {
-        	private int dragedItem = -1;
-        	
-        	private ImageView dragedView;
-        	
-        	private WindowManager windowManager = RSSOverview.this.getWindowManager();
-        	
-        	private LayoutParams layoutParams;
-        	
-        	private int minY = 25; // is the header size --> needs to be changed
-        	
-        	private ListView listView = getListView();
-        	
+		});
+		getListView().setOnTouchListener(new OnTouchListener() {
+			private int dragedItem = -1;
+			
+			private ImageView dragedView;
+			
+			private WindowManager windowManager = RSSOverview.this.getWindowManager();
+			
+			private LayoutParams layoutParams;
+			
+			private int minY = 25; // is the header size --> needs to be changed
+			
+			private ListView listView = getListView();
+			
 			public boolean onTouch(View v, MotionEvent event) {
 				if (feedSort) {
 					int action = event.getAction();
@@ -184,12 +184,12 @@ public class RSSOverview extends ListActivity {
 							}
 							break;
 						}
-						case MotionEvent.ACTION_UP: 
+						case MotionEvent.ACTION_UP:
 						case MotionEvent.ACTION_CANCEL: {
 							// this is the drop action
 							if (dragedItem > -1) {
 								windowManager.removeView(dragedView);
-
+								
 								int newPosition = listView.pointToPosition((int) event.getX(), (int) event.getY());
 								
 								if (newPosition == -1) {
@@ -213,21 +213,21 @@ public class RSSOverview extends ListActivity {
 					return false;
 				}
 			}
-        });
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
-        	startService(new Intent(this, RefreshService.class)); // starts the service independent to this activity
-        } else {
-        	stopService(new Intent(this, RefreshService.class));
-        }
-        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHONPENENABLED, false)) {
-        	new Thread() {
+		});
+		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
+			startService(new Intent(this, RefreshService.class)); // starts the service independent to this activity
+		} else {
+			stopService(new Intent(this, RefreshService.class));
+		}
+		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHONPENENABLED, false)) {
+			new Thread() {
 				public void run() {
 					sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS));
 				}
-        	}.start();
-        }
-    }
-    
+			}.start();
+		}
+	}
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -303,18 +303,18 @@ public class RSSOverview extends ListActivity {
 							builder.setTitle(R.string.dialog_hint);
 							builder.setMessage(R.string.question_refreshwowifi);
 							builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-					            public void onClick(DialogInterface dialog, int which) {
-					            	intent.putExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, true);
-					            	thread.start();
-					            }
-					        });
+								public void onClick(DialogInterface dialog, int which) {
+									intent.putExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, true);
+									thread.start();
+								}
+							});
 							builder.setNeutralButton(R.string.button_alwaysokforall, new DialogInterface.OnClickListener() {
-					            public void onClick(DialogInterface dialog, int which) {
-					            	PreferenceManager.getDefaultSharedPreferences(RSSOverview.this).edit().putBoolean(Strings.SETTINGS_OVERRIDEWIFIONLY, true).commit();
-					            	intent.putExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, true);
-					            	thread.start();
-					            }
-					        });
+								public void onClick(DialogInterface dialog, int which) {
+									PreferenceManager.getDefaultSharedPreferences(RSSOverview.this).edit().putBoolean(Strings.SETTINGS_OVERRIDEWIFIONLY, true).commit();
+									intent.putExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, true);
+									thread.start();
+								}
+							});
 							builder.setNegativeButton(android.R.string.no, null);
 							builder.show();
 						}
@@ -337,15 +337,15 @@ public class RSSOverview extends ListActivity {
 				builder.setTitle(cursor.getString(0));
 				builder.setMessage(R.string.question_deletefeed);
 				builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-		            public void onClick(DialogInterface dialog, int which) {
-		            	new Thread() {
-		            		public void run() {
-		            			getContentResolver().delete(FeedData.FeedColumns.CONTENT_URI(Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)), null, null);
+					public void onClick(DialogInterface dialog, int which) {
+						new Thread() {
+							public void run() {
+								getContentResolver().delete(FeedData.FeedColumns.CONTENT_URI(Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)), null, null);
 								sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET));
-		            		}
-		            	}.start();
-		            }
-		        });
+							}
+						}.start();
+					}
+				});
 				builder.setNegativeButton(android.R.string.no, null);
 				cursor.close();
 				builder.show();
@@ -518,7 +518,7 @@ public class RSSOverview extends ListActivity {
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		Dialog dialog;
-
+		
 		switch (id) {
 			case DIALOG_ERROR_FEEDIMPORT: {
 				dialog = createErrorDialog(R.string.error_feedimport);
@@ -539,9 +539,9 @@ public class RSSOverview extends ListActivity {
 			case DIALOG_ABOUT: {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				
-				builder.setIcon(android.R.drawable.ic_dialog_info);		
+				builder.setIcon(android.R.drawable.ic_dialog_info);
 				builder.setTitle(R.string.menu_about);
-				MainTabActivity.INSTANCE.setupLicenseText(builder);			
+				MainTabActivity.INSTANCE.setupLicenseText(builder);
 				builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.cancel();
@@ -576,8 +576,8 @@ public class RSSOverview extends ListActivity {
 		builder.setTitle(R.string.contextmenu_deleteallentries);
 		builder.setMessage(R.string.question_areyousure);
 		builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-            	new Thread() {
+			public void onClick(DialogInterface dialog, int which) {
+				new Thread() {
 					public void run() {
 						FeedData.deletePicturesOfFeed(context, uri, Strings.DB_EXCUDEFAVORITE);
 						if (context.getContentResolver().delete(uri, Strings.DB_EXCUDEFAVORITE, null) > 0) {
@@ -585,8 +585,8 @@ public class RSSOverview extends ListActivity {
 						}
 					}
 				}.start();
-            }
-        });
+			}
+		});
 		builder.setNegativeButton(android.R.string.no, null);
 		builder.show();
 	}
@@ -597,5 +597,5 @@ public class RSSOverview extends ListActivity {
 			feedSort = enabled;
 		}
 	}
-    
+	
 }

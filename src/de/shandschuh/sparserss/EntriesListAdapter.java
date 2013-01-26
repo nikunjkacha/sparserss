@@ -1,6 +1,6 @@
 /**
  * Sparse rss
- * 
+ *
  * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -137,7 +137,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		final long id = cursor.getLong(idColumn);
 		
 		view.setTag(cursor.getString(linkColumn));
-		 
+		
 		final boolean favorite = !unfavorited.contains(id) && (cursor.getInt(favoriteColumn) == 1 || favorited.contains(id));
 		
 		imageView.setImageResource(favorite ? android.R.drawable.star_on : android.R.drawable.star_off);

@@ -93,24 +93,24 @@ public class MainTabActivity extends TabActivity {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		if (isLightTheme(this)) {
-	    	setTheme(R.style.Theme_Light);
-	    }
-	    super.onCreate(savedInstanceState);
-	    
-        //We need to display progress information
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        
-	    setContentView(R.layout.tabs);
-	    INSTANCE = this;
-	    hasContent = false;
-        if (getPreferences(MODE_PRIVATE).getBoolean(Strings.PREFERENCE_LICENSEACCEPTED, false)) {
-        	setContent();
-        } else {
-        	/* Workaround for android issue 4499 on 1.5 devices */
-        	getTabHost().addTab(getTabHost().newTabSpec(Strings.EMPTY).setIndicator(Strings.EMPTY).setContent(new Intent(this, EmptyActivity.class)));
-        	
-        	showDialog(DIALOG_LICENSEAGREEMENT);
-        }
+			setTheme(R.style.Theme_Light);
+		}
+		super.onCreate(savedInstanceState);
+		
+		// We need to display progress information
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		
+		setContentView(R.layout.tabs);
+		INSTANCE = this;
+		hasContent = false;
+		if (getPreferences(MODE_PRIVATE).getBoolean(Strings.PREFERENCE_LICENSEACCEPTED, false)) {
+			setContent();
+		} else {
+			/* Workaround for android issue 4499 on 1.5 devices */
+			getTabHost().addTab(getTabHost().newTabSpec(Strings.EMPTY).setIndicator(Strings.EMPTY).setContent(new Intent(this, EmptyActivity.class)));
+			
+			showDialog(DIALOG_LICENSEAGREEMENT);
+		}
 	}
 	
 	@Override
@@ -172,7 +172,7 @@ public class MainTabActivity extends TabActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		this.menu = menu;
-
+		
 		Activity activity = getCurrentActivity();
 		
 		if (hasContent && activity != null) {
@@ -206,34 +206,34 @@ public class MainTabActivity extends TabActivity {
 	}
 	
 	private void setContent() {
-	    TabHost tabHost = getTabHost();
-	    
-	    tabHost.addTab(tabHost.newTabSpec(TAG_NORMAL).setIndicator(getString(R.string.overview)).setContent(new Intent().setClass(this, RSSOverview.class)));
-	    hasContent = true;
-	    if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_SHOWTABS, false)) {
-	    	tabHost.addTab(tabHost.newTabSpec(TAG_ALL).setIndicator(getString(R.string.all)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true)));
-	    	
-		    tabHost.addTab(tabHost.newTabSpec(TAG_FAVORITE).setIndicator(getString(R.string.favorites), getResources().getDrawable(android.R.drawable.star_big_on)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.FAVORITES_CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true).putExtra(EntriesListActivity.EXTRA_AUTORELOAD, true)));
-		    tabsAdded = true;
-		    getTabWidget().setVisibility(View.VISIBLE);
-	    }
-	    if (POSTGINGERBREAD) {
-		    /* Change the menu also on ICS when tab is changed */
-		    tabHost.setOnTabChangedListener(new OnTabChangeListener() {
+		TabHost tabHost = getTabHost();
+		
+		tabHost.addTab(tabHost.newTabSpec(TAG_NORMAL).setIndicator(getString(R.string.overview)).setContent(new Intent().setClass(this, RSSOverview.class)));
+		hasContent = true;
+		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_SHOWTABS, false)) {
+			tabHost.addTab(tabHost.newTabSpec(TAG_ALL).setIndicator(getString(R.string.all)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true)));
+			
+			tabHost.addTab(tabHost.newTabSpec(TAG_FAVORITE).setIndicator(getString(R.string.favorites), getResources().getDrawable(android.R.drawable.star_big_on)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.FAVORITES_CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true).putExtra(EntriesListActivity.EXTRA_AUTORELOAD, true)));
+			tabsAdded = true;
+			getTabWidget().setVisibility(View.VISIBLE);
+		}
+		if (POSTGINGERBREAD) {
+			/* Change the menu also on ICS when tab is changed */
+			tabHost.setOnTabChangedListener(new OnTabChangeListener() {
 				public void onTabChanged(String tabId) {
 					if (menu != null) {
 						menu.clear();
 						onCreateOptionsMenu(menu);
 					}
 				}
-		    });
-		    if (menu != null) {
+			});
+			if (menu != null) {
 				menu.clear();
 				onCreateOptionsMenu(menu);
 			}
-	    }
+		}
 	}
-
+	
 	public void setTabWidgetVisible(boolean visible) {
 		if (visible) {
 			if (!tabsAdded) {
@@ -254,7 +254,7 @@ public class MainTabActivity extends TabActivity {
 		View view = getLayoutInflater().inflate(R.layout.license, null);
 		
 		final TextView textView = (TextView) view.findViewById(R.id.license_text);
-
+		
 		textView.setTextColor(textView.getTextColors().getDefaultColor()); // disables color change on selection
 		textView.setText(new StringBuilder(getString(R.string.license_intro)).append(Strings.THREENEWLINES).append(getString(R.string.license)));
 		

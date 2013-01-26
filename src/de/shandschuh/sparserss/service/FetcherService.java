@@ -1,6 +1,6 @@
 /**
  * Sparse rss
- * 
+ *
  * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -83,7 +83,7 @@ public class FetcherService extends IntentService {
 	
 	private static final String LINK_RSS = "<link rel=\"alternate\" ";
 	
-	private static final String LINK_RSS_SLOPPY = "<link rel=alternate "; 
+	private static final String LINK_RSS_SLOPPY = "<link rel=alternate ";
 	
 	private static final String HREF = "href=\"";
 	
@@ -159,12 +159,12 @@ public class FetcherService extends IntentService {
 
 					if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSVIBRATE, false)) {
 						notification.defaults = Notification.DEFAULT_VIBRATE;
-					} 
+					}
 					notification.flags = Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
 					notification.ledARGB = 0xffffffff;
 					notification.ledOnMS = 300;
 					notification.ledOffMS = 1000;
-							
+					
 					String ringtone = preferences.getString(Strings.SETTINGS_NOTIFICATIONSRINGTONE, null);
 							
 					if (ringtone != null && ringtone.length() > 0) {
@@ -176,7 +176,7 @@ public class FetcherService extends IntentService {
 					notificationManager.cancel(0);
 				}
 			}
-		} 
+		}
 	}
 	
 	@Override
@@ -228,7 +228,7 @@ public class FetcherService extends IntentService {
 		
 		handler.setEfficientFeedParsing(preferences.getBoolean(Strings.SETTINGS_EFFICIENTFEEDPARSING, true));
 		handler.setFetchImages(preferences.getBoolean(Strings.SETTINGS_FETCHPICTURES, false));
-				
+		
 		while(cursor.moveToNext()) {
 			String id = cursor.getString(idPosition);
 			
@@ -342,7 +342,7 @@ public class FetcherService extends IntentService {
 					
 					ContentValues values = new ContentValues();
 					
-					values.put(FeedData.FeedColumns.FETCHMODE, fetchMode); 
+					values.put(FeedData.FeedColumns.FETCHMODE, fetchMode);
 					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 				}
 				
@@ -356,7 +356,7 @@ public class FetcherService extends IntentService {
 						iconBytes = getBytes(getConnectionInputStream(iconURLConnection));
 						ContentValues values = new ContentValues();
 						
-						values.put(FeedData.FeedColumns.ICON, iconBytes); 
+						values.put(FeedData.FeedColumns.ICON, iconBytes);
 						context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 					} catch (Exception e) {
 						ContentValues values = new ContentValues();
@@ -393,10 +393,10 @@ public class FetcherService extends IntentService {
 						
 						InputStream inputStream = getConnectionInputStream(connection);
 						
-						byte[] byteBuffer = new byte[4096]; 
+						byte[] byteBuffer = new byte[4096];
 						
 						int n;
-
+						
 						while ( (n = inputStream.read(byteBuffer)) > 0 ) {
 							ouputStream.write(byteBuffer, 0, n);
 						}
@@ -422,7 +422,7 @@ public class FetcherService extends IntentService {
 										handler.setReader(reader);
 										Xml.parse(reader, handler);
 									} catch (Exception e) {
-
+										
 									}
 								} else {
 									StringReader reader = new StringReader(new String(ouputStream.toByteArray()));
@@ -450,7 +450,7 @@ public class FetcherService extends IntentService {
 					values.put(FeedData.FeedColumns.FETCHMODE, 0); // resets the fetchmode to determine it again later
 					values.put(FeedData.FeedColumns.ERROR, e.getMessage());
 					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
-				} 
+				}
 			} finally {
 				if (connection != null) {
 					connection.disconnect();
@@ -495,7 +495,7 @@ public class FetcherService extends IntentService {
 		
 		String location = connection.getHeaderField("Location");
 		
-		if (location != null && (url.getProtocol().equals(Strings._HTTP) && location.startsWith(Strings.HTTPS) || url.getProtocol().equals(Strings._HTTPS) && location.startsWith(Strings.HTTP))) { 
+		if (location != null && (url.getProtocol().equals(Strings._HTTP) && location.startsWith(Strings.HTTPS) || url.getProtocol().equals(Strings._HTTPS) && location.startsWith(Strings.HTTP))) {
 			// if location != null, the system-automatic redirect has failed which indicates a protocol change
 			if (followHttpHttpsRedirects) {
 				connection.disconnect();
@@ -516,13 +516,13 @@ public class FetcherService extends IntentService {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		
 		byte[] buffer = new byte[4096];
-		  
+		
 		int n;
-
+		
 		while ((n = inputStream.read(buffer)) > 0) {
 			output.write(buffer, 0, n);
 		}
-
+		
 		byte[] result  = output.toByteArray();
 		
 		output.close();

@@ -96,7 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <ImageView
-            android:layout_below="@id/news_5" 
+            android:layout_below="@id/news_5"
             android:layout_width="16dip"
             android:layout_height="16dip"
             android:id="@+id/news_icon_6"

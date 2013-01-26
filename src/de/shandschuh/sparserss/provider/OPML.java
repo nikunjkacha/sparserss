@@ -1,6 +1,6 @@
 /**
  * Sparse rss
- * 
+ *
  * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -184,7 +184,7 @@ public class OPML {
 						Cursor cursor = context.getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, null, new StringBuilder(FeedData.FeedColumns.URL).append(Strings.DB_ARG).toString(), new String[] {url}, null);
 						
 						if (!cursor.moveToFirst()) {
-							context.getContentResolver().insert(FeedData.FeedColumns.CONTENT_URI, values); 
+							context.getContentResolver().insert(FeedData.FeedColumns.CONTENT_URI, values);
 						}
 						cursor.close();
 					} else { // this happens only, if the db is new and therefore empty

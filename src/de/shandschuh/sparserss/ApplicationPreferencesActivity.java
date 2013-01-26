@@ -73,7 +73,7 @@ public class ApplicationPreferencesActivity extends PreferenceActivity {
 				}
 				return true;
 			}
-		});	
+		});
 		
 		preference = (Preference) findPreference(Strings.SETTINGS_LIGHTTHEME);
 		preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {

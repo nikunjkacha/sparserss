@@ -1,6 +1,6 @@
 /**
  * Sparse rss
- * 
+ *
  * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -148,7 +148,7 @@ public class FeedDataContentProvider extends ContentProvider {
 			}
 			if (oldVersion < 5) {
 				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.REALLASTUPDATE).append(' ').append(FeedData.TYPE_DATETIME).toString());
-			} 
+			}
 			if (oldVersion < 6) {
 				Cursor cursor = database.query(TABLE_FEEDS, new String[] {FeedData.FeedColumns._ID}, null, null, null, null, FeedData.FeedColumns._ID);
 				
@@ -158,7 +158,7 @@ public class FeedDataContentProvider extends ContentProvider {
 					executeCatchedSQL(database, new StringBuilder("UPDATE ").append(TABLE_FEEDS).append(" SET ").append(FeedData.FeedColumns.PRIORITY).append('=').append(count++).append(" WHERE _ID=").append(cursor.getLong(0)).toString());
 				}
 				cursor.close();
-			} 
+			}
 			if (oldVersion < 7) {
 				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.WIFIONLY).append(' ').append(FeedData.TYPE_BOOLEAN).toString());
 			}
@@ -170,7 +170,7 @@ public class FeedDataContentProvider extends ContentProvider {
 				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.GUID).append(' ').append(FeedData.TYPE_TEXT).toString());
 			}
 			if (oldVersion < 11) {
-				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.AUTHOR).append(' ').append(FeedData.TYPE_TEXT).toString());	
+				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.AUTHOR).append(' ').append(FeedData.TYPE_TEXT).toString());
 			}
 		}
 		
@@ -206,8 +206,6 @@ public class FeedDataContentProvider extends ContentProvider {
 						columnIndices[n] = cursor.getColumnIndex(columnNames[n]);
 					}
 					
-					
-					
 					while (cursor.moveToNext()) {
 						ContentValues values = new ContentValues();
 						
@@ -241,7 +239,7 @@ public class FeedDataContentProvider extends ContentProvider {
 								} else {
 									values.put(columnNames[n], cursor.getString(columnIndices[n]));
 								}
-							} 
+							}
 						}
 						values.put(FeedData.FeedColumns.PRIORITY, count++);
 						newDatabase.insert(TABLE_FEEDS, null, values);
@@ -319,7 +317,7 @@ public class FeedDataContentProvider extends ContentProvider {
 				table = TABLE_ENTRIES;
 				break;
 			}
-			case URI_FAVORITES_ENTRY : 
+			case URI_FAVORITES_ENTRY :
 			case URI_ALLENTRIES_ENTRY : {
 				table = TABLE_ENTRIES;
 				where.append(FeedData.EntryColumns._ID).append('=').append(uri.getPathSegments().get(1));
@@ -357,11 +355,11 @@ public class FeedDataContentProvider extends ContentProvider {
 		switch(option) {
 			case URI_FEEDS : return "vnd.android.cursor.dir/vnd.feeddata.feed";
 			case URI_FEED : return "vnd.android.cursor.item/vnd.feeddata.feed";
-			case URI_FAVORITES : 
+			case URI_FAVORITES :
 			case URI_ALLENTRIES :
 			case URI_ENTRIES : return "vnd.android.cursor.dir/vnd.feeddata.entry";
-			case URI_FAVORITES_ENTRY : 
-			case URI_ALLENTRIES_ENTRY : 
+			case URI_FAVORITES_ENTRY :
+			case URI_ALLENTRIES_ENTRY :
 			case URI_ENTRY : return "vnd.android.cursor.item/vnd.feeddata.entry";
 			default : throw new IllegalArgumentException("Unknown URI: "+uri);
 		}
@@ -455,7 +453,7 @@ public class FeedDataContentProvider extends ContentProvider {
 				queryBuilder.setTables("entries join (select name, icon, _id as feed_id from feeds) as F on (entries.feedid = F.feed_id)");
 				break;
 			}
-			case URI_FAVORITES_ENTRY : 
+			case URI_FAVORITES_ENTRY :
 			case URI_ALLENTRIES_ENTRY : {
 				queryBuilder.setTables(TABLE_ENTRIES);
 				queryBuilder.appendWhere(new StringBuilder(FeedData.EntryColumns._ID).append('=').append(uri.getPathSegments().get(1)));
@@ -497,7 +495,7 @@ public class FeedDataContentProvider extends ContentProvider {
 					int newPriority = values.getAsInteger(FeedData.FeedColumns.PRIORITY);
 					
 					Cursor priorityCursor = database.query(TABLE_FEEDS, PROJECTION_PRIORITY, FeedData.FeedColumns._ID+"="+feedId, null, null, null, null);
-				
+					
 					if (priorityCursor.moveToNext()) {
 						int oldPriority = priorityCursor.getInt(0);
 						
@@ -532,7 +530,7 @@ public class FeedDataContentProvider extends ContentProvider {
 				table = TABLE_ENTRIES;
 				break;
 			}
-			case URI_FAVORITES_ENTRY : 
+			case URI_FAVORITES_ENTRY :
 			case URI_ALLENTRIES_ENTRY : {
 				table = TABLE_ENTRIES;
 				where.append(FeedData.EntryColumns._ID).append('=').append(uri.getPathSegments().get(1));
@@ -540,7 +538,7 @@ public class FeedDataContentProvider extends ContentProvider {
 			}
 			case URI_FAVORITES : {
 				table = TABLE_ENTRIES;
-				where.append(FeedData.EntryColumns.FAVORITE).append(EQUALS_ONE);				
+				where.append(FeedData.EntryColumns.FAVORITE).append(EQUALS_ONE);
 				break;
 			}
 		}

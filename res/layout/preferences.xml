@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen 
+<PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory 
+    <PreferenceCategory
         android:title="@string/settings_category_refresh">
         <CheckBoxPreference
             android:title="@string/settings_enabled"
@@ -12,7 +12,7 @@
             android:name="@string/settings_refreshinterval"
             android:summary="@string/settings_refreshinterval_description"
             android:title="@string/settings_refreshinterval"
-            android:key="refresh.interval" 
+            android:key="refresh.interval"
             android:inputType="number"
             android:dependency="refresh.enabled"
             android:defaultValue="1800000"
@@ -34,7 +34,7 @@
             android:summary="@string/settings_enclosuredownloadwarning_description"
             android:key="enclosurewarnings.enabled" />
     </PreferenceCategory>
-    <PreferenceCategory 
+    <PreferenceCategory
         android:title="@string/settings_category_notofications">
         <CheckBoxPreference
             android:title="@string/settings_enabled"
@@ -68,7 +68,7 @@
             android:name="@string/settings_keeptime"
             android:summary="@string/settings_keeptime_description"
             android:title="@string/settings_keeptime"
-            android:key="keeptime" 
+            android:key="keeptime"
             android:inputType="number"
             android:defaultValue="4"
             android:entries="@array/settings_keeptimes"
@@ -77,25 +77,25 @@
             android:title="@string/settings_disablepictures"
             android:defaultValue="false"
             android:summary="@string/settings_disablepictures_description"
-            android:key="pictures.disable" 
+            android:key="pictures.disable"
             android:disableDependentsState="true"/>
         <CheckBoxPreference
             android:title="@string/settings_fetchpictures"
             android:defaultValue="false"
             android:summary="@string/settings_fetchpictures_description"
-            android:key="pictures.fetch" 
+            android:key="pictures.fetch"
             android:dependency="pictures.disable"/>
         <CheckBoxPreference
             android:title="@string/settings_lighttheme"
             android:defaultValue="false"
             android:summary="@string/settings_lighttheme_description"
-            android:key="lighttheme" 
+            android:key="lighttheme"
             android:disableDependentsState="true"/>
         <CheckBoxPreference
             android:title="@string/settings_blacktextwhite"
             android:defaultValue="false"
             android:summary="@string/settings_blacktextwhite_description"
-            android:key="blacktextonwhite" 
+            android:key="blacktextonwhite"
             android:dependency="lighttheme"/>
         <ListPreference
             android:name="@string/settings_fontsize"
@@ -112,7 +112,7 @@
             android:summary="@string/settings_gestures_description"
             android:key="gestures.enabled"/>
     </PreferenceCategory>
-    <PreferenceCategory 
+    <PreferenceCategory
         android:title="@string/settings_category_network">
         <CheckBoxPreference
             android:title="@string/settings_standarduseragent"

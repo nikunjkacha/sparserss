@@ -283,7 +283,7 @@ public class RSSHandler extends DefaultHandler {
 			entryLink = null;
 			if (!feedRefreshed) {
 				ContentValues values = new ContentValues();
-					
+				
 				if (feedTitle == null && title != null && title.length() > 0) {
 					values.put(FeedData.FeedColumns.NAME, title.toString().trim());
 				}
@@ -460,7 +460,7 @@ public class RSSHandler extends DefaultHandler {
 					if (descriptionString.length() > 0) {
 						if (fetchImages) {
 							images = new Vector<String>(4);
-							 
+							
 							Matcher matcher = imgPattern.matcher(description);
 							
 							while (matcher.find()) {
@@ -470,7 +470,7 @@ public class RSSHandler extends DefaultHandler {
 								descriptionString = descriptionString.replace(match, new StringBuilder(Strings.FILEURL).append(FeedDataContentProvider.IMAGEFOLDER).append(Strings.IMAGEID_REPLACEMENT).append(match.substring(match.lastIndexOf('/')+1)).toString());
 							}
 						}
-						values.put(FeedData.EntryColumns.ABSTRACT, descriptionString); 
+						values.put(FeedData.EntryColumns.ABSTRACT, descriptionString);
 					}
 				}
 				

@@ -1,6 +1,6 @@
 /**
  * Sparse rss
- * 
+ *
  * Copyright (c) 2010 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -37,24 +37,22 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import de.shandschuh.sparserss.Strings;
 
-public class RefreshService extends Service {   
+public class RefreshService extends Service {
 	private static final String SIXTYMINUTES = "3600000";
 	
-    private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
+	private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
 		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 			if (Strings.SETTINGS_REFRESHINTERVAL.equals(key)) {
 				restartTimer(false);
 			}
 		}
-    };
-
-    private Intent refreshBroadcastIntent;
-    
+	};
+	
+	private Intent refreshBroadcastIntent;
+	
 	private AlarmManager alarmManager;
 	
 	private PendingIntent timerIntent;
-	
-	
 	
 	private SharedPreferences preferences = null;
 	

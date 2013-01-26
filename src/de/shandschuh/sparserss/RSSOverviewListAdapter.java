@@ -1,6 +1,6 @@
 /**
  * Sparse rss
- * 
+ *
  * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -174,7 +174,7 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 	@Override
 	protected synchronized void onContentChanged() {
 		/*
-		 * we delay the second(!) content change by 1.5 second such that it gets called at most once per 1.5 seconds 
+		 * we delay the second(!) content change by 1.5 second such that it gets called at most once per 1.5 seconds
 		 * to take stress away from the UI and avoid not needed updates
 		 */
 		if (!updateTask.isPosted()) {
