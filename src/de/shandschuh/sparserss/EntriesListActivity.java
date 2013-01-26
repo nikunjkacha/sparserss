@@ -262,7 +262,7 @@ public class EntriesListActivity extends ListActivity {
 				
 				getContentResolver().delete(ContentUris.withAppendedId(uri, id), null, null);
 				FeedData.deletePicturesOfEntry(Long.toString(id));
-				entriesListAdapter.getCursor().requery(); // he have no other choice
+				entriesListAdapter.getCursor().requery(); // we have no other choice
 				break;
 			}
 			case CONTEXTMENU_COPYURL: {
