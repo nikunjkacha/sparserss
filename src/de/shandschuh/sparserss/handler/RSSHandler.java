@@ -356,7 +356,7 @@ public class RSSHandler extends DefaultHandler {
 		} else if (TAG_GUID.equals(localName)) {
 			guidTagEntered = true;
 			guid = new StringBuilder();
-		} else if (TAG_AUTHOR.endsWith(localName)) {
+		} else if (TAG_AUTHOR.equals(localName)) {
 			authorTagEntered = true;
 			if (author == null) {
 				author = new StringBuilder();
