@@ -98,6 +98,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String TAG_NAME = "name";
 	
+	private static final String TAG_CREATOR = "creator";
+	
 	private static final String ATTRIBUTE_URL = "url";
 	
 	private static final String ATTRIBUTE_HREF = "href";
@@ -356,8 +358,11 @@ public class RSSHandler extends DefaultHandler {
 		} else if (TAG_GUID.equals(localName)) {
 			guidTagEntered = true;
 			guid = new StringBuilder();
-		} else if (TAG_AUTHOR.equals(localName)) {
+		} else if (TAG_AUTHOR.equals(localName) || TAG_CREATOR.equals(localName)) {
 			authorTagEntered = true;
+			if (TAG_CREATOR.equals(localName)) {
+				nameTagEntered = true; // we simulate the existence of a name tag to trigger the characters(..) method
+			}
 			if (author == null) {
 				author = new StringBuilder();
 			} else if (author.length() > 0){
@@ -559,7 +564,7 @@ public class RSSHandler extends DefaultHandler {
 			guidTagEntered = false;
 		} else if (TAG_NAME.equals(localName)) {
 			nameTagEntered = false;
-		} else if (TAG_AUTHOR.equals(localName)) {
+		} else if (TAG_AUTHOR.equals(localName) || TAG_CREATOR.equals(localName)) {
 			authorTagEntered = false;
 		}
 	}
