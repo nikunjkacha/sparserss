@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  *
- * Copyright (c) 2010-2012 Stefan Handschuh
+ * Copyright (c) 2010-2013 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -360,7 +360,7 @@ public class RSSHandler extends DefaultHandler {
 			authorTagEntered = true;
 			if (author == null) {
 				author = new StringBuilder();
-			} else {
+			} else if (author.length() > 0){
 				// this indicates multiple authors
 				author.append(Strings.COMMASPACE);
 			}
