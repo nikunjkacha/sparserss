@@ -218,7 +218,7 @@ public class FetcherService extends IntentService {
 		
 		int iconPosition = cursor.getColumnIndex(FeedData.FeedColumns.ICON);
 		
-		boolean imposeUserAgent = !preferences.getBoolean(Strings.SETTINGS_STANDARDUSERAGENT, false);
+		boolean imposeUserAgent = !preferences.getBoolean(Strings.SETTINGS_STANDARDUSERAGENT, true);
 		
 		boolean followHttpHttpsRedirects = preferences.getBoolean(Strings.SETTINGS_HTTPHTTPSREDIRECTS, false);
 		
