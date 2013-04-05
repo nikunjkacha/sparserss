@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  *
- * Copyright (c) 2010-2012 Stefan Handschuh
+ * Copyright (c) 2010-2013 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.util.TypedValue;
@@ -130,15 +129,7 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 		} else {
 			updateTextView.setText(new StringBuilder(context.getString(R.string.error)).append(COLON).append(cursor.getString(errorPosition)));
 		}
-		if (unreadCount > 0) {
-			textView.setTypeface(Typeface.DEFAULT_BOLD);
-			textView.setEnabled(true);
-			updateTextView.setEnabled(true);
-		} else {
-			textView.setTypeface(Typeface.DEFAULT);
-			textView.setEnabled(false);
-			updateTextView.setEnabled(false);
-		}
+		textView.setEnabled(unreadCount > 0);
 		
 		byte[] iconBytes = cursor.getBlob(iconPosition);
 		

@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  *
- * Copyright (c) 2010-2012 Stefan Handschuh
+ * Copyright (c) 2010-2013 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
@@ -196,13 +195,9 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		}
 		
 		if (forcedState == STATE_ALLUNREAD && !markedAsRead.contains(id) || (forcedState != STATE_ALLREAD && cursor.isNull(readDateColumn) && !markedAsRead.contains(id)) || markedAsUnread.contains(id)) {
-			textView.setTypeface(Typeface.DEFAULT_BOLD);
 			textView.setEnabled(true);
-			dateTextView.setEnabled(true);
 		} else {
-			textView.setTypeface(Typeface.DEFAULT);
 			textView.setEnabled(false);
-			dateTextView.setEnabled(false);
 		}
 	}
 
