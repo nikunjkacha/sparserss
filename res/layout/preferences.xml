@@ -115,11 +115,6 @@
     <PreferenceCategory
         android:title="@string/settings_category_network">
         <CheckBoxPreference
-            android:title="@string/settings_standarduseragent"
-            android:defaultValue="true"
-            android:summary="@string/settings_standarduseragent_description"
-            android:key="standarduseragent" />
-        <CheckBoxPreference
             android:title="@string/settings_httphttpsredirects"
             android:defaultValue="false"
             android:summary="@string/settings_httphttpsredirects_description"

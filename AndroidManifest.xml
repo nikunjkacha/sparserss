@@ -65,7 +65,7 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-        <activity android:name=".FeedConfigActivity" android:theme="@style/Theme.Dialog">
+        <activity android:name=".FeedConfigActivity">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT"/>
                 <category android:name="android.intent.category.DEFAULT"/>

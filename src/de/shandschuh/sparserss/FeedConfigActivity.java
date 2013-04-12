@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  *
- * Copyright (c) 2012 Stefan Handschuh
+ * Copyright (c) 2012, 2013 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,7 @@ import de.shandschuh.sparserss.provider.FeedData;
 public class FeedConfigActivity extends Activity {
 	private static final String WASACTIVE = "wasactive";
 	
-	private static final String[] PROJECTION = new String[] {FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL, FeedData.FeedColumns.WIFIONLY};
+	private static final String[] PROJECTION = new String[] {FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL, FeedData.FeedColumns.WIFIONLY, FeedData.FeedColumns.IMPOSE_USERAGENT};
 	
 	private EditText nameEditText;
 	
@@ -49,10 +49,12 @@ public class FeedConfigActivity extends Activity {
 	
 	private CheckBox refreshOnlyWifiCheckBox;
 	
+	private CheckBox standardUseragentCheckBox;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
 		setContentView(R.layout.feedsettings);
 		setResult(RESULT_CANCELED);
 		
@@ -61,7 +63,8 @@ public class FeedConfigActivity extends Activity {
 		nameEditText = (EditText) findViewById(R.id.feed_title);
 		urlEditText = (EditText) findViewById(R.id.feed_url);
 		refreshOnlyWifiCheckBox = (CheckBox) findViewById(R.id.wifionlycheckbox);
-			
+		standardUseragentCheckBox = (CheckBox) findViewById(R.id.standarduseragentcheckbox);
+		
 		if (intent.getAction().equals(Intent.ACTION_INSERT)) {
 			setTitle(R.string.newfeed_title);
 			restoreInstanceState(savedInstanceState);
@@ -83,6 +86,7 @@ public class FeedConfigActivity extends Activity {
 						ContentValues values = new ContentValues();
 						
 						values.put(FeedData.FeedColumns.WIFIONLY, refreshOnlyWifiCheckBox.isChecked() ? 1 : 0);
+						values.put(FeedData.FeedColumns.IMPOSE_USERAGENT, standardUseragentCheckBox.isChecked() ? 0 : 1);
 						values.put(FeedData.FeedColumns.URL, url);
 						values.put(FeedData.FeedColumns.ERROR, (String) null);
 						
@@ -102,11 +106,12 @@ public class FeedConfigActivity extends Activity {
 			
 			if (!restoreInstanceState(savedInstanceState)) {
 				Cursor cursor = getContentResolver().query(intent.getData(), PROJECTION, null, null, null);
-					
+				
 				if (cursor.moveToNext()) {
 					nameEditText.setText(cursor.getString(0));
 					urlEditText.setText(cursor.getString(1));
 					refreshOnlyWifiCheckBox.setChecked(cursor.getInt(2) == 1);
+					standardUseragentCheckBox.setChecked(cursor.isNull(3) || cursor.getInt(3) == 0);
 					cursor.close();
 				} else {
 					cursor.close();
@@ -125,6 +130,7 @@ public class FeedConfigActivity extends Activity {
 						Toast.makeText(FeedConfigActivity.this, R.string.error_feedurlexists, Toast.LENGTH_LONG).show();
 					} else {
 						cursor.close();
+						
 						ContentValues values = new ContentValues();
 						
 						if (!url.startsWith(Strings.HTTP) && !url.startsWith(Strings.HTTPS)) {
@@ -136,7 +142,7 @@ public class FeedConfigActivity extends Activity {
 						
 						values.put(FeedData.FeedColumns.NAME, name.trim().length() > 0 ? name : null);
 						values.put(FeedData.FeedColumns.FETCHMODE, 0);
-						values.put(FeedData.FeedColumns.WIFIONLY, refreshOnlyWifiCheckBox.isChecked() ? 1 : 0);
+						values.put(FeedData.FeedColumns.IMPOSE_USERAGENT, standardUseragentCheckBox.isChecked() ? 0 : 1);
 						values.put(FeedData.FeedColumns.ERROR, (String) null);
 						getContentResolver().update(getIntent().getData(), values, null, null);
 						
@@ -161,6 +167,8 @@ public class FeedConfigActivity extends Activity {
 			nameEditText.setText(savedInstanceState.getCharSequence(FeedData.FeedColumns.NAME));
 			urlEditText.setText(savedInstanceState.getCharSequence(FeedData.FeedColumns.URL));
 			refreshOnlyWifiCheckBox.setChecked(savedInstanceState.getBoolean(FeedData.FeedColumns.WIFIONLY));
+			standardUseragentCheckBox.setChecked(!savedInstanceState.getBoolean(FeedData.FeedColumns.IMPOSE_USERAGENT));
+			// we don't have to negate this here, if we would not negate it in the OnSaveInstanceStage, but lets do it for the sake of readability
 			return true;
 		} else {
 			return false;
@@ -173,6 +181,7 @@ public class FeedConfigActivity extends Activity {
 		outState.putCharSequence(FeedData.FeedColumns.NAME, nameEditText.getText());
 		outState.putCharSequence(FeedData.FeedColumns.URL, urlEditText.getText());
 		outState.putBoolean(FeedData.FeedColumns.WIFIONLY, refreshOnlyWifiCheckBox.isChecked());
+		outState.putBoolean(FeedData.FeedColumns.IMPOSE_USERAGENT, !standardUseragentCheckBox.isChecked());
 	}
 
 }

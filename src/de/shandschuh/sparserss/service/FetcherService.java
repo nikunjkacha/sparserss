@@ -218,7 +218,7 @@ public class FetcherService extends IntentService {
 		
 		int iconPosition = cursor.getColumnIndex(FeedData.FeedColumns.ICON);
 		
-		boolean imposeUserAgent = !preferences.getBoolean(Strings.SETTINGS_STANDARDUSERAGENT, true);
+		int imposeUseragentPosition = cursor.getColumnIndex(FeedData.FeedColumns.IMPOSE_USERAGENT);
 		
 		boolean followHttpHttpsRedirects = preferences.getBoolean(Strings.SETTINGS_HTTPHTTPSREDIRECTS, false);
 		
@@ -231,6 +231,8 @@ public class FetcherService extends IntentService {
 		
 		while(cursor.moveToNext()) {
 			String id = cursor.getString(idPosition);
+			
+			boolean imposeUserAgent = !cursor.isNull(imposeUseragentPosition) && cursor.getInt(imposeUseragentPosition) == 1;
 			
 			HttpURLConnection connection = null;
 			
