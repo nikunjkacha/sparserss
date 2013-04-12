@@ -142,6 +142,7 @@ public class FeedConfigActivity extends Activity {
 						
 						values.put(FeedData.FeedColumns.NAME, name.trim().length() > 0 ? name : null);
 						values.put(FeedData.FeedColumns.FETCHMODE, 0);
+						values.put(FeedData.FeedColumns.WIFIONLY, refreshOnlyWifiCheckBox.isChecked() ? 1 : 0);
 						values.put(FeedData.FeedColumns.IMPOSE_USERAGENT, standardUseragentCheckBox.isChecked() ? 0 : 1);
 						values.put(FeedData.FeedColumns.ERROR, (String) null);
 						getContentResolver().update(getIntent().getData(), values, null, null);
