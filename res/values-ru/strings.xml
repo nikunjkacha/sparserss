@@ -13,7 +13,7 @@
     <string name="contextmenu_refresh">Обновить</string>
     <string name="menu_settings">Настройки</string>
     <string name="contextmenu_markasread">Прочитано</string>
-    <string name="contextmenu_markasunread">Непрочитано</string>
+    <string name="contextmenu_markasunread">Не прочитано</string>
     <string name="contextmenu_hideread">Фильтр</string>
     <string name="contextmenu_showread">Показать всё</string>
     <string name="contextmenu_copyurl">URL в буфер</string>
