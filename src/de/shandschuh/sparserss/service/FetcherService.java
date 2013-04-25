@@ -103,13 +103,18 @@ public class FetcherService extends IntentService {
 	
 	private static Proxy proxy;
 	
+	private boolean destroyed;
+	
+	private RSSHandler handler;
+	
 	public FetcherService() {
 		super(SERVICENAME);
+		destroyed = false;
 		HttpURLConnection.setFollowRedirects(true);
 	}
-		
+	
 	@Override
-	public void onHandleIntent(Intent intent) {
+	public synchronized void onHandleIntent(Intent intent) {
 		if (preferences == null) {
 			try {
 				preferences = PreferenceManager.getDefaultSharedPreferences(createPackageContext(Strings.PACKAGE, 0));
@@ -139,7 +144,7 @@ public class FetcherService extends IntentService {
 				proxy = null;
 			}
 			
-			int newCount = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID), networkInfo, intent.getBooleanExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, false));
+			int newCount = refreshFeeds(FetcherService.this, intent.getStringExtra(Strings.FEEDID), networkInfo, intent.getBooleanExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, false));
 			
 			if (newCount > 0) {
 				if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSENABLED, false)) {
@@ -183,7 +188,7 @@ public class FetcherService extends IntentService {
 	public IBinder onBind(Intent intent) {
 		return null;
 	}
-
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -193,12 +198,16 @@ public class FetcherService extends IntentService {
 	@Override
 	public void onDestroy() {
 		if (MainTabActivity.INSTANCE != null) {
-			MainTabActivity.INSTANCE.setProgressBarIndeterminateVisibility(false);
+			MainTabActivity.INSTANCE.internalSetProgressBarIndeterminateVisibility(false);
+		}
+		destroyed = true;
+		if (handler != null) {
+			handler.cancel();
 		}
 		super.onDestroy();
 	}
 	
-	private static int refreshFeedsStatic(Context context, String feedId, NetworkInfo networkInfo, boolean overrideWifiOnly) {
+	private int refreshFeeds(Context context, String feedId, NetworkInfo networkInfo, boolean overrideWifiOnly) {
 		String selection = null;
 		
 		if (!overrideWifiOnly && networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
@@ -225,12 +234,13 @@ public class FetcherService extends IntentService {
 		
 		int result = 0;
 		
-		RSSHandler handler = new RSSHandler(context);
-		
+		if (handler == null) {
+			handler = new RSSHandler(context);
+		}
 		handler.setEfficientFeedParsing(preferences.getBoolean(Strings.SETTINGS_EFFICIENTFEEDPARSING, true));
 		handler.setFetchImages(preferences.getBoolean(Strings.SETTINGS_FETCHPICTURES, false));
 		
-		while(cursor.moveToNext()) {
+		while(!destroyed && cursor.moveToNext()) {
 			String id = cursor.getString(idPosition);
 			
 			boolean imposeUserAgent = !cursor.isNull(imposeUseragentPosition) && cursor.getInt(imposeUseragentPosition) == 1;
@@ -266,7 +276,7 @@ public class FetcherService extends IntentService {
 								}
 								if (pos > -1) {
 									posStart = line.indexOf(HREF, pos);
-
+									
 									if (posStart > -1) {
 										String url = line.substring(posStart+6, line.indexOf('"', posStart+10)).replace(Strings.AMP_SG, Strings.AMP);
 										
@@ -514,7 +524,7 @@ public class FetcherService extends IntentService {
 		}
 		return connection;
 	}
-
+	
 	public static byte[] getBytes(InputStream inputStream) throws IOException {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		

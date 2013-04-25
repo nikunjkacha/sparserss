@@ -88,6 +88,7 @@
         <receiver android:name=".RefreshBroadcastReceiver" >
             <intent-filter>
                 <action android:name="de.shandschuh.sparserss.REFRESH" />
+                <action android:name="de.shandschuh.sparserss.STOPREFRESH" />
             </intent-filter>
         </receiver>
         <receiver android:name=".BootCompletedBroadcastReceiver" >

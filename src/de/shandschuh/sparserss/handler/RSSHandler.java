@@ -591,7 +591,7 @@ public class RSSHandler extends DefaultHandler {
 		inputStream = null;
 	}
 	
-	private void cancel() {
+	public void cancel() {
 		if (!cancelled) {
 			cancelled = true;
 			done = true;

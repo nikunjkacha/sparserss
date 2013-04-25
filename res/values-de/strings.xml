@@ -5,6 +5,7 @@
     <string name="norssfeeds">Keine RSS Feeds</string>
     <string name="noentries">Keine Einträge</string>
     <string name="menu_refresh">Aktualisieren</string>
+    <string name="menu_cancelrefresh">Aktualisieren abbrechen</string>
     <string name="contextmenu_delete">Löschen</string>
     <string name="favorites">Favoriten</string>
 

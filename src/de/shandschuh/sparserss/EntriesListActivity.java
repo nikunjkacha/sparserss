@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  *
- * Copyright (c) 2010-2012 Stefan Handschuh
+ * Copyright (c) 2010-2013 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -169,7 +169,9 @@ public class EntriesListActivity extends ListActivity {
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		menu.setGroupVisible(R.id.menu_group_0, entriesListAdapter.getCount() > 0);
+		if (menu != null) {
+			menu.setGroupVisible(R.id.menu_group_0, entriesListAdapter.getCount() > 0);
+		}
 		return true;
 	}
 	

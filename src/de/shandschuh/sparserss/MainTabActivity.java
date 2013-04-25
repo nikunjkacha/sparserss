@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  *
- * Copyright (c) 2010-2012 Stefan Handschuh
+ * Copyright (c) 2010-2013 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -47,7 +47,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
@@ -85,11 +84,13 @@ public class MainTabActivity extends TabActivity {
 	private BroadcastReceiver refreshReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			setProgressBarIndeterminateVisibility(true);
+			internalSetProgressBarIndeterminateVisibility(true);
 		}
 	};
 	
 	private boolean hasContent;
+	
+	private boolean progressBarVisible;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		if (isLightTheme(this)) {
@@ -114,16 +115,14 @@ public class MainTabActivity extends TabActivity {
 	}
 	
 	@Override
-	protected void onResume()
-	{
+	protected void onResume() {
 		super.onResume();
-		setProgressBarIndeterminateVisibility(isCurrentlyRefreshing());
+		internalSetProgressBarIndeterminateVisibility(isCurrentlyRefreshing());
 		registerReceiver(refreshReceiver, new IntentFilter("de.shandschuh.sparserss.REFRESH"));
 	}
 	
 	@Override
-	protected void onPause()
-	{
+	protected void onPause() {
 		unregisterReceiver(refreshReceiver);
 		super.onPause();
 	}
@@ -240,7 +239,7 @@ public class MainTabActivity extends TabActivity {
 				TabHost tabHost = getTabHost();
 				
 				tabHost.addTab(tabHost.newTabSpec(TAG_ALL).setIndicator(getString(R.string.all)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true)));
-			    tabHost.addTab(tabHost.newTabSpec(TAG_FAVORITE).setIndicator(getString(R.string.favorites), getResources().getDrawable(android.R.drawable.star_big_on)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.FAVORITES_CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true)));
+				tabHost.addTab(tabHost.newTabSpec(TAG_FAVORITE).setIndicator(getString(R.string.favorites), getResources().getDrawable(android.R.drawable.star_big_on)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.FAVORITES_CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true)));
 				tabsAdded = true;
 			}
 			getTabWidget().setVisibility(View.VISIBLE);
@@ -279,8 +278,7 @@ public class MainTabActivity extends TabActivity {
 		builder.setView(view);
 	}
 	
-	private boolean isCurrentlyRefreshing()
-	{
+	private boolean isCurrentlyRefreshing() {
 		ActivityManager manager = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
 		for (RunningServiceInfo service: manager.getRunningServices(Integer.MAX_VALUE)) {
 			if (FetcherService.class.getName().equals(service.service.getClassName())) {
@@ -288,6 +286,21 @@ public class MainTabActivity extends TabActivity {
 			}
 		}
 		return false;
+	}
+	
+	public void internalSetProgressBarIndeterminateVisibility(boolean progressBarVisible) {
+		setProgressBarIndeterminateVisibility(progressBarVisible);
+		this.progressBarVisible = progressBarVisible;
+		
+		Activity activity = getCurrentActivity();
+		
+		if (activity != null) {
+			activity.onPrepareOptionsMenu(null);
+		}
+	}
+	
+	public boolean isProgressBarVisible() {
+		return progressBarVisible;
 	}
 
 }

@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  *
- * Copyright (c) 2010-2012 Stefan Handschuh
+ * Copyright (c) 2010-2013 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -102,6 +102,8 @@ public class RSSOverview extends ListActivity {
 	
 	private RSSOverviewListAdapter listAdapter;
 	
+	private Menu menu;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -111,7 +113,7 @@ public class RSSOverview extends ListActivity {
 		super.onCreate(savedInstanceState);
 		
 		if (notificationManager == null) {
-		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		}
 		setContentView(R.layout.main);
 		listAdapter = new RSSOverviewListAdapter(this);
@@ -239,13 +241,33 @@ public class RSSOverview extends ListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.feedoverview, menu);
+		this.menu = menu;
 		return true;
 	}
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		menu.setGroupVisible(R.id.menu_group_0, !feedSort);
-		menu.setGroupVisible(R.id.menu_group_1, feedSort);
+		if (menu == null) {
+			menu = this.menu;
+		}
+		if (menu != null) { // menu can still be null since the MainTabActivity.internalSetProgressBarIndeterminateVisibility method may be called first
+			menu.setGroupVisible(R.id.menu_group_1, feedSort);
+			if (feedSort) {
+				menu.setGroupVisible(R.id.menu_group_0, false);
+			} else {
+				menu.setGroupVisible(R.id.menu_group_0, true);
+				
+				MenuItem refreshMenuItem = menu.findItem(R.id.menu_refresh);
+				
+				if (MainTabActivity.INSTANCE.isProgressBarVisible()) {
+					refreshMenuItem.setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+					refreshMenuItem.setTitle(R.string.menu_cancelrefresh);
+				} else {
+					refreshMenuItem.setIcon(android.R.drawable.ic_menu_rotate);
+					refreshMenuItem.setTitle(R.string.menu_refresh);
+				}
+			}
+		}
 		return true;
 	}
 
@@ -259,11 +281,15 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case R.id.menu_refresh: {
-				new Thread() {
-					public void run() {
-						sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS).putExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, PreferenceManager.getDefaultSharedPreferences(RSSOverview.this).getBoolean(Strings.SETTINGS_OVERRIDEWIFIONLY, false)));
-					}
-				}.start();
+				if (MainTabActivity.INSTANCE.isProgressBarVisible()) {
+					sendBroadcast(new Intent(Strings.ACTION_STOPREFRESHFEEDS));
+				} else {
+					new Thread() {
+						public void run() {
+							sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS).putExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, PreferenceManager.getDefaultSharedPreferences(RSSOverview.this).getBoolean(Strings.SETTINGS_OVERRIDEWIFIONLY, false)));
+						}
+					}.start();
+				}
 				break;
 			}
 			case CONTEXTMENU_EDIT_ID: {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- Copyright (c) 2010-2012 Stefan Handschuh
+ Copyright (c) 2010-2013 Stefan Handschuh
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,7 @@
     <string name="norssfeeds">No RSS feeds</string>
     <string name="noentries">No entries</string>
     <string name="menu_refresh">Refresh</string>
+    <string name="menu_cancelrefresh">Cancel refresh</string>
     <string name="contextmenu_delete">Delete</string>
     <string name="favorites">Favorites</string>
 
@@ -57,7 +58,7 @@
     <string name="menu_share">Share</string>
 
     <!-- For translators: you don't need to translate or include the following string -->
-    <string name="license">Copyright &#169; 2010-2012 Stefan Handschuh (handschuh.stefan@googlemail.com)\n\n
+    <string name="license">Copyright &#169; 2010-2013 Stefan Handschuh (handschuh.stefan@googlemail.com)\n\n
         Translators\n
          - Dutch: Eelko Berkenpies\n
          - Spanish: Sergio Martín\n
@@ -195,7 +196,7 @@
 
     <string name="button_accept">Accept</string>
     <string name="button_decline">Decline</string>
-    <string name="button_alwaysokforall">Always ok for all</string>
+    <string name="button_alwaysokforall">Always OK for all</string>
 
     <string name="message_exportedto">Exported into %s.</string>
 

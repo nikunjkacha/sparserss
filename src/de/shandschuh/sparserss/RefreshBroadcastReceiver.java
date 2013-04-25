@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  *
- * Copyright (c) 2010 Stefan Handschuh
+ * Copyright (c) 2010-2013 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,11 @@ import de.shandschuh.sparserss.service.FetcherService;
 public class RefreshBroadcastReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		context.startService(new Intent(context, FetcherService.class).putExtras(intent)); // a thread would mark the process as inactive
+		if (Strings.ACTION_REFRESHFEEDS.equals(intent.getAction())) {
+			context.startService(new Intent(context, FetcherService.class).putExtras(intent)); // a thread would mark the process as inactive
+		} else if (Strings.ACTION_STOPREFRESHFEEDS.equals(intent.getAction())) {
+			context.stopService(new Intent(context, FetcherService.class));
+		}
 	}
 	
 }

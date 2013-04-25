@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  *
- * Copyright (c) 2010-2012 Stefan Handschuh
+ * Copyright (c) 2010-2013 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -81,6 +81,8 @@ public final class Strings {
 	public static final String SETTINGS_EFFICIENTFEEDPARSING = "efficientfeedparsing";
 	
 	public static final String ACTION_REFRESHFEEDS = "de.shandschuh.sparserss.REFRESH";
+	
+	public static final String ACTION_STOPREFRESHFEEDS = "de.shandschuh.sparserss.STOPREFRESH";
 	
 	public static final String ACTION_UPDATEWIDGET = "de.shandschuh.sparserss.FEEDUPDATED";
 	
