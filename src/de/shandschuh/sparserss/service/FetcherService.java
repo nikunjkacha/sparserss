@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  *
- * Copyright (c) 2010-2012 Stefan Handschuh
+ * Copyright (c) 2010-2013 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -138,25 +138,25 @@ public class FetcherService extends IntentService {
 			} else {
 				proxy = null;
 			}
-
+			
 			int newCount = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID), networkInfo, intent.getBooleanExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, false));
-					
+			
 			if (newCount > 0) {
 				if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSENABLED, false)) {
 					Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {COUNT}, new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null, null);
-							
+					
 					cursor.moveToFirst();
 					newCount = cursor.getInt(0);
 					cursor.close();
-							
+					
 					String text = new StringBuilder().append(newCount).append(' ').append(getString(R.string.newentries)).toString();
-							
+					
 					Notification notification = new Notification(R.drawable.ic_statusbar_rss, text, System.currentTimeMillis());
-							
+					
 					Intent notificationIntent = new Intent(FetcherService.this, MainTabActivity.class);
-							
+					
 					PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+					
 					if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSVIBRATE, false)) {
 						notification.defaults = Notification.DEFAULT_VIBRATE;
 					}
@@ -166,7 +166,7 @@ public class FetcherService extends IntentService {
 					notification.ledOffMS = 1000;
 					
 					String ringtone = preferences.getString(Strings.SETTINGS_NOTIFICATIONSRINGTONE, null);
-							
+					
 					if (ringtone != null && ringtone.length() > 0) {
 						notification.sound = Uri.parse(ringtone);
 					}
@@ -192,8 +192,9 @@ public class FetcherService extends IntentService {
 	
 	@Override
 	public void onDestroy() {
-		if (MainTabActivity.INSTANCE != null)
+		if (MainTabActivity.INSTANCE != null) {
 			MainTabActivity.INSTANCE.setProgressBarIndeterminateVisibility(false);
+		}
 		super.onDestroy();
 	}
 	
@@ -203,7 +204,7 @@ public class FetcherService extends IntentService {
 		if (!overrideWifiOnly && networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
 			selection = new StringBuilder(FeedData.FeedColumns.WIFIONLY).append("=0 or ").append(FeedData.FeedColumns.WIFIONLY).append(" IS NULL").toString(); // "IS NOT 1" does not work on 2.1
 		}
-
+		
 		Cursor cursor = context.getContentResolver().query(feedId == null ? FeedData.FeedColumns.CONTENT_URI : FeedData.FeedColumns.CONTENT_URI(feedId), null, selection, null, null); // no managed query here
 		
 		int urlPosition = cursor.getColumnIndex(FeedData.FeedColumns.URL);
@@ -242,7 +243,7 @@ public class FetcherService extends IntentService {
 				connection = setupConnection(feedUrl, imposeUserAgent, followHttpHttpsRedirects);
 				
 				String contentType = connection.getContentType();
-
+				
 				int fetchMode = cursor.getInt(fetchmodePosition);
 				
 				handler.init(new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl);
@@ -322,7 +323,7 @@ public class FetcherService extends IntentService {
 						char[] chars = new char[20];
 						
 						int length = bufferedReader.read(chars);
-
+						
 						String xmlDescription = new String(chars, 0, length);
 						
 						connection.disconnect();
