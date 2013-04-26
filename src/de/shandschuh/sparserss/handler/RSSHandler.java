@@ -124,10 +124,10 @@ public class RSSHandler extends DefaultHandler {
 		new SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US),
 		new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US),
 		new SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'z", Locale.US),
-		
+		new SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy'", Locale.US)
 	};
 
-	private static final int PUBDATEFORMAT_COUNT = 3;
+	private static final int PUBDATEFORMAT_COUNT = 4;
 	
 	private static final DateFormat[] UPDATE_DATEFORMATS = {
 		new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ"),
