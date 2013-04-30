@@ -88,6 +88,10 @@ public final class Strings {
 	
 	public static final String ACTION_RESTART = "de.shandschuh.sparserss.RESTART";
 	
+	public static final String ACTION_PLUGINGUIRESPONSE = "de.shandschuh.sparserss.PLUGINGUI_RESPONSE";
+	
+	public static final String ACTION_PLUGINGUIREQUEST = "de.shandschuh.sparserss.ACTION_PLUGINGUI_REQUEST";
+	
 	public static final String FEEDID = "feedid";
 	
 	public static final String DB_ISNULL = " IS NULL";
@@ -179,5 +183,11 @@ public final class Strings {
 	public static final String COMMASPACE = ", ";
 	
 	public static final String SCHEDULED = "scheduled";
+	
+	public static final String PERMISSION_PLUGINGUIRESONSE = "de.shandschuh.sparserss.PLUGINGUI_RESPONSE";
+	
+	public static final String PERMISSION_PLUGINGUIREQUEST = "de.shandschuh.sparserss.PLUGINGUI_REQUEST";
+	
+	public static final String PERMISSION_PLUGINGUIOPEN = "de.shandschuh.sparserss.PLUGINGUI_OPEN";
 
 }

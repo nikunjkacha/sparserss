@@ -14,6 +14,9 @@
     <uses-permission android:name="de.shandschuh.sparserss.READFEEDS"/>
     <uses-permission android:name="de.shandschuh.sparserss.WRITEFEEDS"/>
     
+    <uses-permission android:name="de.shandschuh.sparserss.PLUGINGUI_REQUEST"/>
+    <uses-permission android:name="de.shandschuh.sparserss.PLUGINGUI_OPEN"/>
+    
     <permission
         android:name="de.shandschuh.sparserss.READFEEDS"
         android:protectionLevel="normal"
@@ -24,6 +27,18 @@
         android:protectionLevel="normal"
         android:label="@string/permission_writefeeds"
         android:description="@string/permission_writefeeds_description"/>
+    <permission
+        android:name="de.shandschuh.sparserss.PLUGINGUI_REQUEST"
+        android:label="@string/permission_plugingui_request"
+        android:description="@string/permission_plugingui_request_description"/>
+    <permission
+        android:name="de.shandschuh.sparserss.PLUGINGUI_RESPONSE"
+        android:label="@string/permission_plugingui_response"
+        android:description="@string/permission_plugingui_response_description"/>
+    <permission
+        android:name="de.shandschuh.sparserss.PLUGINGUI_OPEN"
+        android:label="@string/permission_plugingui_open"
+        android:description="@string/permission_plugingui_open_description"/>
     <application
         android:icon="@drawable/icon"
         android:label="@string/app_name"

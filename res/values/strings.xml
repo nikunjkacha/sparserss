@@ -152,6 +152,8 @@
     <string name="settings_proxy_host">Host</string>
     <string name="settings_proxy_port">Port</string>
     <string name="settings_proxy_type">Type</string>
+    
+    <string name="settings_category_plugins">External plugins</string>
 
     <string name="never">never</string>
     <string name="update">Update</string>
@@ -243,4 +245,10 @@
     <string name="permission_readfeeds_description">Allows the application to read Sparse RSS feeds and entries.</string>
     <string name="permission_writefeeds">Write feed data</string>
     <string name="permission_writefeeds_description">Allows the application to write Sparse RSS feeds and entries.</string>
+    <string name="permission_plugingui_request">Request plugingui</string>
+    <string name="permission_plugingui_request_description">Allow the application to request plugin configuration guis</string>
+    <string name="permission_plugingui_response">Response plugingui</string>
+    <string name="permission_plugingui_response_description">Allow the application to respond to a plugin gui request</string>
+    <string name="permission_plugingui_open">Open plugingui</string>
+    <string name="permission_plugingui_open_description">Allow the application to open a plugin gui</string>
 </resources>
