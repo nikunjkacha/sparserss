@@ -141,10 +141,10 @@ public class RSSHandler extends DefaultHandler {
 	private static final DateFormat[] UPDATE_DATEFORMATS = {
 		new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ"),
 		new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz", Locale.US),
-		
+		new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US),
 	};
 	
-	private static final int DATEFORMAT_COUNT = 2;
+	private static final int DATEFORMAT_COUNT = 3;
 	
 	private static final String Z = "Z";
 	
