@@ -102,6 +102,12 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String TAG_CREATOR = "creator";
 	
+	private static final String TAG_ENCLOSUREURL = "url";
+	
+	private static final String TAG_ENCLOSURETYPE = "type";
+	
+	private static final String TAG_ENCLOSURELENGTH = "length";
+	
 	private static final String ATTRIBUTE_URL = "url";
 	
 	private static final String ATTRIBUTE_HREF = "href";
@@ -226,6 +232,20 @@ public class RSSHandler extends DefaultHandler {
 	
 	private boolean nameTagEntered;
 	
+	private boolean enclosureTagEntered;
+	
+	private boolean enclosureUrlTagEntered;
+	
+	private boolean enclosureTypeTagEntered;
+	
+	private boolean enclosureLengthTagEntered;
+	
+	private StringBuilder enclosureUrl;
+	
+	private StringBuilder enclosureType;
+	
+	private StringBuilder enclosureLength;
+	
 	public RSSHandler(Context context) {
 		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "4"))*86400000l;
 		this.context = context;
@@ -282,6 +302,13 @@ public class RSSHandler extends DefaultHandler {
 		guidTagEntered = false;
 		authorTagEntered = false;
 		author = null;
+		enclosureTagEntered = false;
+		enclosureUrlTagEntered = false;
+		enclosureUrl = null;
+		enclosureTypeTagEntered = false;
+		enclosureType = null;
+		enclosureLengthTagEntered = false;
+		enclosureLength = null;
 	}
 
 	@Override
@@ -363,6 +390,7 @@ public class RSSHandler extends DefaultHandler {
 			descriptionTagEntered = true;
 			description = new StringBuilder();
 		} else if (TAG_ENCLOSURE.equals(localName)) {
+			enclosureTagEntered = true;
 			startEnclosure(attributes, attributes.getValue(Strings.EMPTY, ATTRIBUTE_URL));
 		} else if (TAG_GUID.equals(localName)) {
 			guidTagEntered = true;
@@ -380,11 +408,22 @@ public class RSSHandler extends DefaultHandler {
 			}
 		} else if (TAG_NAME.equals(localName)) {
 			nameTagEntered = true;
+		} else if (enclosureTagEntered) {
+			if (TAG_ENCLOSUREURL.equals(localName)) {
+				enclosureUrlTagEntered = true;
+				enclosureUrl = new StringBuilder();
+			} else if (TAG_ENCLOSURETYPE.equals(localName)) {
+				enclosureTypeTagEntered = true;
+				enclosureType = new StringBuilder();
+			} else if (TAG_ENCLOSURELENGTH.equals(localName)) {
+				enclosureLengthTagEntered = true;
+				enclosureLength = new StringBuilder();
+			}
 		}
 	}
 	
 	private void startEnclosure(Attributes attributes, String url) {
-		if (enclosure == null) { // fetch the first enclosure only
+		if (enclosure == null && url != null && url.length() > 0) { // fetch the first enclosure only
 			enclosure = new StringBuilder(url);
 			enclosure.append(Strings.ENCLOSURE_SEPARATOR);
 			
@@ -421,6 +460,12 @@ public class RSSHandler extends DefaultHandler {
 			guid.append(ch, start, length);
 		} else if (authorTagEntered && nameTagEntered) {
 			author.append(ch, start, length);
+		} else if (enclosureUrlTagEntered) {
+			enclosureUrl.append(ch, start, length);
+		} else if (enclosureTypeTagEntered) {
+			enclosureType.append(ch, start, length);
+		} else if (enclosureLengthTagEntered) {
+			enclosureLength.append(ch, start, length);
 		}
 	}
 	
@@ -496,6 +541,18 @@ public class RSSHandler extends DefaultHandler {
 				String enclosureString = null;
 				
 				StringBuilder existanceStringBuilder = new StringBuilder(FeedData.EntryColumns.LINK).append(Strings.DB_ARG);
+				
+				if (enclosure == null && enclosureUrl != null && enclosureUrl.length() > 0) {
+					enclosure = enclosureUrl;
+					enclosure.append(Strings.ENCLOSURE_SEPARATOR);
+					if (enclosureType != null && enclosureType.length() > 0) {
+						enclosure.append(enclosureType);
+					}
+					enclosure.append(Strings.ENCLOSURE_SEPARATOR);
+					if (enclosureLength != null && enclosureLength.length() > 0) {
+						enclosure.append(enclosureLength);
+					}
+				}
 				
 				if (enclosure != null && enclosure.length() > 0) {
 					enclosureString = enclosure.toString();
@@ -573,6 +630,9 @@ public class RSSHandler extends DefaultHandler {
 			enclosure = null;
 			guid = null;
 			author = null;
+			enclosureUrl = null;
+			enclosureType = null;
+			enclosureLength = null;
 		} else if (TAG_RSS.equals(localName) || TAG_RDF.equals(localName) || TAG_FEED.equals(localName)) {
 			done = true;
 		} else if (TAG_GUID.equals(localName)) {
@@ -581,6 +641,14 @@ public class RSSHandler extends DefaultHandler {
 			nameTagEntered = false;
 		} else if (TAG_AUTHOR.equals(localName) || TAG_CREATOR.equals(localName)) {
 			authorTagEntered = false;
+		} else if (TAG_ENCLOSURE.equals(localName)) {
+			enclosureTagEntered = false;
+		} else if (TAG_ENCLOSUREURL.equals(localName)) {
+			enclosureUrlTagEntered = false;
+		} else if (TAG_ENCLOSURETYPE.equals(localName)) {
+			enclosureTypeTagEntered = false;
+		} else if (TAG_ENCLOSURELENGTH.equals(localName)) {
+			enclosureLengthTagEntered = false;
 		}
 	}
 	
