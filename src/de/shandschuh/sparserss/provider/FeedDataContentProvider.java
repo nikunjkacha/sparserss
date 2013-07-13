@@ -101,11 +101,12 @@ public class FeedDataContentProvider extends ContentProvider {
 		
 		// Create .nomedia file, that will prevent Android image gallery from showing random parts of webpages we've saved
 		String nomedia = Environment.getExternalStorageDirectory()+"/sparserss/.nomedia";
+		
 		try {
-			if (! (new File(nomedia).exists())) {
+			if (!(new File(nomedia).exists())) {
 				new FileOutputStream(nomedia).close();
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 		}
 	}
 	
