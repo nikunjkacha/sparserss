@@ -26,7 +26,6 @@
 package de.shandschuh.sparserss.provider;
 
 import java.io.File;
-import java.io.FileOutputStream;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -100,11 +99,11 @@ public class FeedDataContentProvider extends ContentProvider {
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites/#", URI_FAVORITES_ENTRY);
 		
 		// Create .nomedia file, that will prevent Android image gallery from showing random parts of webpages we've saved
-		String nomedia = Environment.getExternalStorageDirectory()+"/sparserss/.nomedia";
+		File nomedia = new File(Environment.getExternalStorageDirectory()+"/sparserss/.nomedia");
 		
 		try {
-			if (!(new File(nomedia).exists())) {
-				new FileOutputStream(nomedia).close();
+			if (!nomedia.exists()) {
+				nomedia.createNewFile();
 			}
 		} catch (Exception e) {
 		}
