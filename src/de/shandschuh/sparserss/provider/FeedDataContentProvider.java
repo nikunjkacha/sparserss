@@ -98,6 +98,8 @@ public class FeedDataContentProvider extends ContentProvider {
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites", URI_FAVORITES);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites/#", URI_FAVORITES_ENTRY);
 		
+		new File(Environment.getExternalStorageDirectory()+"/sparserss").mkdir();
+		
 		// Create .nomedia file, that will prevent Android image gallery from showing random parts of webpages we've saved
 		File nomedia = new File(Environment.getExternalStorageDirectory()+"/sparserss/.nomedia");
 		
