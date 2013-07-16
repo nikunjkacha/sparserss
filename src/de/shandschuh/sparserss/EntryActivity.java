@@ -42,6 +42,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -426,6 +427,7 @@ public class EntryActivity extends Activity {
 						iconCursor.close();
 					}
 					
+					Drawable icon = null;
 					if (iconBytes != null && iconBytes.length > 0) {
 						int bitmapSizeInDip = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, getResources().getDisplayMetrics());
 						Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
@@ -433,13 +435,16 @@ public class EntryActivity extends Activity {
 							if (bitmap.getHeight() != bitmapSizeInDip) {
 								bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
 							}
-							
-							if (MainTabActivity.POSTGINGERBREAD) {
-								CompatibilityHelper.setActionBarDrawable(this, new BitmapDrawable(bitmap));
-							} else {
-								setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(bitmap));
-							}
+							icon = new BitmapDrawable(bitmap);
 						}
+					}
+					if (icon == null) {
+						icon = getResources().getDrawable(de.shandschuh.sparserss.R.drawable.icon);
+					}
+					if (MainTabActivity.POSTGINGERBREAD) {
+						CompatibilityHelper.setActionBarDrawable(this, icon);
+					} else {
+						setFeatureDrawable(Window.FEATURE_LEFT_ICON, icon);
 					}
 				}
 				
