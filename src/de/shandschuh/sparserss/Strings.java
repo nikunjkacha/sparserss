@@ -179,5 +179,7 @@ public final class Strings {
 	public static final String COMMASPACE = ", ";
 	
 	public static final String SCHEDULED = "scheduled";
+	
+	public static final String LAST_TAB = "lasttab";
 
 }

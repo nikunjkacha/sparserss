@@ -37,6 +37,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.Bundle;
@@ -210,12 +211,9 @@ public class MainTabActivity extends TabActivity {
 		tabHost.addTab(tabHost.newTabSpec(TAG_NORMAL).setIndicator(getString(R.string.overview)).setContent(new Intent().setClass(this, RSSOverview.class)));
 		hasContent = true;
 		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_SHOWTABS, false)) {
-			tabHost.addTab(tabHost.newTabSpec(TAG_ALL).setIndicator(getString(R.string.all)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true)));
-			
-			tabHost.addTab(tabHost.newTabSpec(TAG_FAVORITE).setIndicator(getString(R.string.favorites), getResources().getDrawable(android.R.drawable.star_big_on)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.FAVORITES_CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true).putExtra(EntriesListActivity.EXTRA_AUTORELOAD, true)));
-			tabsAdded = true;
-			getTabWidget().setVisibility(View.VISIBLE);
+			setTabWidgetVisible(true);
 		}
+		final MainTabActivity mainTabActivity = this;
 		if (POSTGINGERBREAD) {
 			/* Change the menu also on ICS when tab is changed */
 			tabHost.setOnTabChangedListener(new OnTabChangeListener() {
@@ -224,6 +222,9 @@ public class MainTabActivity extends TabActivity {
 						menu.clear();
 						onCreateOptionsMenu(menu);
 					}
+					SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mainTabActivity).edit();
+					editor.putString(Strings.LAST_TAB, tabId);
+					editor.commit();
 				}
 			});
 			if (menu != null) {
@@ -235,14 +236,28 @@ public class MainTabActivity extends TabActivity {
 	
 	public void setTabWidgetVisible(boolean visible) {
 		if (visible) {
+			TabHost tabHost = getTabHost();
 			if (!tabsAdded) {
-				TabHost tabHost = getTabHost();
-				
 				tabHost.addTab(tabHost.newTabSpec(TAG_ALL).setIndicator(getString(R.string.all)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true)));
-				tabHost.addTab(tabHost.newTabSpec(TAG_FAVORITE).setIndicator(getString(R.string.favorites), getResources().getDrawable(android.R.drawable.star_big_on)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.FAVORITES_CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true)));
+				
+				tabHost.addTab(tabHost.newTabSpec(TAG_FAVORITE).setIndicator(getString(R.string.favorites), getResources().getDrawable(android.R.drawable.star_big_on)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.FAVORITES_CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true).putExtra(EntriesListActivity.EXTRA_AUTORELOAD, true)));
 				tabsAdded = true;
 			}
 			getTabWidget().setVisibility(View.VISIBLE);
+
+			String lastTab = PreferenceManager.getDefaultSharedPreferences(this).getString(Strings.LAST_TAB, TAG_NORMAL);
+			boolean tabFound = false;
+			for(int i = 0; i < tabHost.getTabWidget().getChildCount(); ++i) {
+				tabHost.setCurrentTab(i);
+				String currentTab = tabHost.getCurrentTabTag();
+				if (lastTab.equals(currentTab)) {
+					tabFound = true;
+					break;
+				}
+			}
+			if (!tabFound) {
+				tabHost.setCurrentTab(0);
+			}
 		} else {
 			getTabWidget().setVisibility(View.GONE);
 		}
