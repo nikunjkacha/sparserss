@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Sparse rss</string>
     <string name="menu_addfeed">Hinzufügen</string>
-    <string name="norssfeeds">Keine RSS Feeds</string>
+    <string name="norssfeeds">Keine RSS-Feeds</string>
     <string name="noentries">Keine Einträge</string>
     <string name="menu_refresh">Aktualisieren</string>
     <string name="menu_cancelrefresh">Aktualisieren abbrechen</string>
@@ -47,17 +47,17 @@
 
     <string name="settings_category_contentpresentation">Inhaltsanzeige</string>
     <string name="settings_prioritize">Bevorzuge ungelesenen Inhalt</string>
-    <string name="settings_prioritize_description">Zeige ungelesene Feedeinträge über gelesenen Einträgen</string>
-    <string name="settings_keeptime">Zeit für die die Einträge aufbewahrt werden</string>
+    <string name="settings_prioritize_description">Zeige ungelesene Feed-Einträge über gelesenen Einträgen</string>
+    <string name="settings_keeptime">Zeit, für die die Einträge aufbewahrt werden</string>
     <string name="settings_keeptime_description">Die Einträge, die älter sind, werden automatisch gelöscht</string>
     <string name="settings_disablepictures">Bilder deaktivieren</string>
     <string name="settings_disablepictures_description">Keine Bilder anzeigen oder laden</string>
     <string name="settings_fetchpictures">Bilder herunterladen</string>
-    <string name="settings_fetchpictures_description">Alle Bilder herunterladen und local speichern</string>
+    <string name="settings_fetchpictures_description">Alle Bilder herunterladen und lokal speichern</string>
     <string name="settings_lighttheme">Helles Theme</string>
-    <string name="settings_lighttheme_description">Benutze helles Theme (Anwendung wird neugestartet)</string>
+    <string name="settings_lighttheme_description">Benutze helles Theme (Anwendung wird neu gestartet)</string>
     <string name="settings_blacktextwhite">Schwarzer Text auf weißem Hintergrund</string>
-    <string name="settings_blacktextwhite_description">Präsentiere rss-Einträge mit schwarzem Text auf weißem Hintergrund</string>
+    <string name="settings_blacktextwhite_description">Präsentiere RSS-Einträge mit schwarzem Text auf weißem Hintergrund</string>
     <string name="settings_fontsize">Schriftgröße</string>
     <string name="settings_fontsize_description">Schriftgröße für einzelne Einträge</string>
     <string name="settings_gestures">Gesten</string>
@@ -70,34 +70,34 @@
     <string name="settings_overridewifionly_description">Erlaube manuelles Aktualisieren einzelner \"nur WLan\" Feeds</string>
 
     <string name="settings_enclosuredownloadwarning">Anhang-Download-Warnung</string>
-    <string name="settings_enclosuredownloadwarning_description">Zeige eine Warnung vor dem öffnen/herunterladen von angehangenen Dateien</string>
+    <string name="settings_enclosuredownloadwarning_description">Zeige eine Warnung vor dem Öffnen/Herunterladen von angehängten Dateien</string>
 
     <string name="settings_hideread">Verstecke gelesene Einträge</string>
     <string name="settings_hideread_description">Verstecke Einträge, wenn sie gelesen wurden</string>
-    <string name="settings_entrysettings">Einträgeeinstellungen</string>
+    <string name="settings_entrysettings">Einträge-Einstellungen</string>
     <string name="settings_visiblefeeds">Sichtbare Feeds</string>
-    <string name="settings_widgetentrycount">Eintragsanzahl</string>
-    <string name="settings_widgetentrycount_description">Anzahl an Einträgen die im Widget gezeigt werden</string>
+    <string name="settings_widgetentrycount">Anzahl Einträge</string>
+    <string name="settings_widgetentrycount_description">Anzahl an Einträgen, die im Widget gezeigt werden</string>
     <string name="settings_widgetbackground">Hintergrund</string>
-    <string name="settings_widgetbackground_description">Farbe und Transparenz des Widgethintergrundes</string>
+    <string name="settings_widgetbackground_description">Farbe und Transparenz des Widget-Hintergrundes</string>
     <string name="settings_showtabs">Zeige Tabs</string>
     <string name="settings_showtabs_description">Zusätzliche Tabs für Favoriten und alle Einträge</string>
 
     <string name="settings_category_network">Netzwerk</string>
-    <string name="settings_standarduseragent">Standard user-agent</string>
-    <string name="settings_standarduseragent_description">Benutze den Standard-user-agent Namen</string>
+    <string name="settings_standarduseragent">Standard User-Agent</string>
+    <string name="settings_standarduseragent_description">Benutze den Standard-User-Agent-Namen</string>
     <string name="settings_httphttpsredirects">Folge http &lt;-&gt; https Weiterleitungen</string>
     <string name="settings_httphttpsredirects_description">Folge automatisch http zu https (und umgekehrt) Weiterleitungen</string>
     <string name="settings_enableefficientfeedparsing">Effiziente Feed-Auswertung</string>
     <string name="settings_enableefficientfeedparsing_description">Auswertung des Feeds wird automatisch bei vorhandenen oder zu alten Einträgen gestoppt</string>
     <string name="settings_proxy_wifionly">Nur WLan</string>
-    <string name="settings_proxy_wifionly_description">Benutze den Proxy nur für WLan Verbindungen</string>
+    <string name="settings_proxy_wifionly_description">Benutze den Proxy nur für WLan-Verbindungen</string>
 
     <string name="update">Aktualisiert</string>
     <string name="never">nie</string>
     <string name="unread">ungelesen</string>
     <string name="newentries">neue Einträge</string>
-    <string name="rss_feeds">RSS Feeds</string>
+    <string name="rss_feeds">RSS-Feeds</string>
     <string name="error">Fehler</string>
     <string name="priority">Priorität</string>
     <string name="select_feeds">Feeds auswählen</string>
@@ -107,9 +107,9 @@
 
     <string name="error_feedurlexists">Die URL existiert bereits.</string>
     <string name="error_feedimport">Die ausgewählte Datei konnte nicht importiert werden.</string>
-    <string name="error_feedexport">Der Export ist fehlgeschlagen. Bitte gehen Sie sicher, dass Sie eine schreibbare SD-Karte eingehängt haben.</string>
+    <string name="error_feedexport">Der Export ist fehlgeschlagen. Bitte stellen Sie sicher, dass Sie eine schreibbare SD-Karte eingehängt haben.</string>
     <string name="error_invalidimportfile">Die ausgewählte Datei ist für den Import nicht gültig.</string>
-    <string name="error_externalstoragenotavailable">Der externe Speicher (z.B. SD-Karte) ist nicht verfügbar.</string>
+    <string name="error_externalstoragenotavailable">Der externe Speicher (z. B. SD-Karte) ist nicht verfügbar.</string>
 
     <string name="feed_title">Titel</string>
     <string name="select_file">Datei auswählen (SD-Wurzel)</string>
@@ -125,7 +125,7 @@
     <string name="question_deletefeed">Wollen Sie wirklich diesen Feed und all seine Einträge löschen?</string>
     <string name="question_refreshwowifi">Wollen Sie wirklich diesen Feed ohne WLan aktualisieren?</string>
     <string name="question_areyousure">Sind Sie sicher?</string>
-    <string name="question_playenclosure">Wollen Sie die Datei %1$s von angeblicher Größe von %2$s herunterladen und abspielen?\nDas kann sehr viel Datenvolumen verbrauchen!</string>
+    <string name="question_playenclosure">Wollen Sie die Datei %1$s (angebliche Größe: %2$s) herunterladen und abspielen?\nDas kann sehr viel Datenvolumen verbrauchen!</string>
 
     <string name="warning_moretraffic">Deaktivieren dieser Option verursacht mehr Datenverkehr (Traffic).</string>
 
@@ -162,7 +162,7 @@
     </string-array>
 
     <string name="permission_readfeeds">Feeds lesen</string>
-    <string name="permission_readfeeds_description">Erlaubt dem Programm Sparse RSS Feeds und Einträge zu lesen.</string>
+    <string name="permission_readfeeds_description">Erlaubt dem Programm Sparse rss Feeds und Einträge zu lesen.</string>
     <string name="permission_writefeeds">Feeds schreiben</string>
-    <string name="permission_writefeeds_description">Erlaubt dem Programm Sparse RSS Feeds und Einträge zu schreiben.</string>
+    <string name="permission_writefeeds_description">Erlaubt dem Programm Sparse rss Feeds und Einträge zu schreiben.</string>
 </resources>
