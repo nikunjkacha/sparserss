@@ -348,7 +348,8 @@ public class RSSHandler extends DefaultHandler {
 			}
 			if (TAG_ENCLOSURE.equals(attributes.getValue(Strings.EMPTY, ATTRIBUTE_REL))) {
 				startEnclosure(attributes, attributes.getValue(Strings.EMPTY, ATTRIBUTE_HREF));
-			} else {
+			} else if (entryLink == null || qName.equals(localName)) {
+				// this indicates either there is no link yet or it is a non prefix tag which is preferred
 				entryLink = new StringBuilder();
 				
 				boolean foundLink = false;
@@ -633,6 +634,7 @@ public class RSSHandler extends DefaultHandler {
 			enclosureUrl = null;
 			enclosureType = null;
 			enclosureLength = null;
+			entryLink = null;
 		} else if (TAG_RSS.equals(localName) || TAG_RDF.equals(localName) || TAG_FEED.equals(localName)) {
 			done = true;
 		} else if (TAG_GUID.equals(localName)) {
