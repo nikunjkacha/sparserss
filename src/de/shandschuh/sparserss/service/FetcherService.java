@@ -338,6 +338,7 @@ public class FetcherService extends IntentService {
 						int length = bufferedReader.read(chars);
 						
 						String xmlDescription = new String(chars, 0, length);
+						
 						redirectHost = connection.getURL().getHost();
 						connection.disconnect();
 						connection = setupConnection(connection.getURL(), imposeUserAgent, followHttpHttpsRedirects);
