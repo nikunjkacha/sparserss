@@ -66,8 +66,8 @@
     <string name="settings_refreshonopen">Aktualisiere bei Start</string>
     <string name="settings_refreshonopen_description">Aktualisiere alle Feeds, wenn das Programm startet</string>
 
-    <string name="settings_overridewifionly">Überschreibe \"Nur mit WLan aktualisieren\"</string>
-    <string name="settings_overridewifionly_description">Erlaube manuelles Aktualisieren einzelner \"nur WLan\" Feeds</string>
+    <string name="settings_overridewifionly">Überschreibe \"Nur mit WLAN aktualisieren\"</string>
+    <string name="settings_overridewifionly_description">Erlaube manuelles Aktualisieren einzelner \"nur WLAN\"-Feeds</string>
 
     <string name="settings_enclosuredownloadwarning">Anhang-Download-Warnung</string>
     <string name="settings_enclosuredownloadwarning_description">Zeige eine Warnung vor dem Öffnen/Herunterladen von angehängten Dateien</string>
@@ -90,8 +90,8 @@
     <string name="settings_httphttpsredirects_description">Folge automatisch http zu https (und umgekehrt) Weiterleitungen</string>
     <string name="settings_enableefficientfeedparsing">Effiziente Feed-Auswertung</string>
     <string name="settings_enableefficientfeedparsing_description">Auswertung des Feeds wird automatisch bei vorhandenen oder zu alten Einträgen gestoppt</string>
-    <string name="settings_proxy_wifionly">Nur WLan</string>
-    <string name="settings_proxy_wifionly_description">Benutze den Proxy nur für WLan-Verbindungen</string>
+    <string name="settings_proxy_wifionly">Nur WLAN</string>
+    <string name="settings_proxy_wifionly_description">Benutze den Proxy nur für WLAN-Verbindungen</string>
 
     <string name="update">Aktualisiert</string>
     <string name="never">nie</string>
@@ -113,7 +113,7 @@
 
     <string name="feed_title">Titel</string>
     <string name="select_file">Datei auswählen (SD-Wurzel)</string>
-    <string name="refreshonwifionly">Nur über WLan aktualisieren</string>
+    <string name="refreshonwifionly">Nur über WLAN aktualisieren</string>
 
     <string name="red">Rot</string>
     <string name="green">Grün</string>
@@ -123,7 +123,7 @@
     <string name="websiteorfeed">(Webseite oder Feed)</string>
 
     <string name="question_deletefeed">Wollen Sie wirklich diesen Feed und all seine Einträge löschen?</string>
-    <string name="question_refreshwowifi">Wollen Sie wirklich diesen Feed ohne WLan aktualisieren?</string>
+    <string name="question_refreshwowifi">Wollen Sie wirklich diesen Feed ohne WLAN aktualisieren?</string>
     <string name="question_areyousure">Sind Sie sicher?</string>
     <string name="question_playenclosure">Wollen Sie die Datei %1$s (angebliche Größe: %2$s) herunterladen und abspielen?\nDas kann sehr viel Datenvolumen verbrauchen!</string>
 
