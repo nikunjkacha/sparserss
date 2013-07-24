@@ -11,8 +11,7 @@
     <group android:id="@+id/menu_group_1">
         <item android:id="@+id/menu_hideread"
             android:icon="@android:drawable/ic_menu_close_clear_cancel"
-            android:title="@string/contextmenu_hideread"
-            android:checkable="true"/>
+            android:title="@string/contextmenu_hideread"/>
         <item android:id="@+id/menu_deleteread"
             android:icon="@android:drawable/ic_menu_delete"
             android:title="@string/contextmenu_deleteread"/>
