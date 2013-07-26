@@ -78,6 +78,8 @@ public class EntriesListActivity extends ListActivity {
 	
 	private byte[] iconBytes;
 	
+	private String feedName;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if (MainTabActivity.isLightTheme(this)) {
@@ -86,7 +88,7 @@ public class EntriesListActivity extends ListActivity {
 		
 		super.onCreate(savedInstanceState);
 		
-		String title = null;
+		feedName = null;
 		
 		iconBytes = null;
 		
@@ -98,7 +100,7 @@ public class EntriesListActivity extends ListActivity {
 			Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(feedId), FEED_PROJECTION, null, null, null);
 			
 			if (cursor.moveToFirst()) {
-				title = cursor.isNull(0) ? cursor.getString(1) : cursor.getString(0);
+				feedName = cursor.isNull(0) ? cursor.getString(1) : cursor.getString(0);
 				iconBytes = cursor.getBlob(2);
 			}
 			cursor.close();
@@ -117,8 +119,8 @@ public class EntriesListActivity extends ListActivity {
 		entriesListAdapter = new EntriesListAdapter(this, uri, intent.getBooleanExtra(EXTRA_SHOWFEEDINFO, false), intent.getBooleanExtra(EXTRA_AUTORELOAD, false));
 		setListAdapter(entriesListAdapter);
 		
-		if (title != null) {
-			setTitle(title);
+		if (feedName != null) {
+			setTitle(feedName);
 		}
 		if (iconBytes != null && iconBytes.length > 0) {
 			int bitmapSizeInDip = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, getResources().getDisplayMetrics());
@@ -158,7 +160,7 @@ public class EntriesListActivity extends ListActivity {
 		textView.setEnabled(false);
 		view.findViewById(android.R.id.text2).setEnabled(false);
 		entriesListAdapter.neutralizeReadState();
-		startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(uri, id)).putExtra(EXTRA_SHOWREAD, entriesListAdapter.isShowRead()).putExtra(FeedData.FeedColumns.ICON, iconBytes));
+		startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(uri, id)).putExtra(EXTRA_SHOWREAD, entriesListAdapter.isShowRead()).putExtra(FeedData.FeedColumns.ICON, iconBytes).putExtra(FeedData.FeedColumns.NAME, feedName));
 	}
 	
 	@Override

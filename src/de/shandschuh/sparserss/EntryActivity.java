@@ -156,6 +156,8 @@ public class EntryActivity extends Activity {
 	
 	private byte[] iconBytes;
 	
+	private String feedName;
+	
 	private WebView webView;
 	
 	private WebView webView0; // only needed for the animation
@@ -227,6 +229,7 @@ public class EntryActivity extends Activity {
 		parentUri = FeedData.EntryColumns.PARENT_URI(uri.getPath());
 		showRead = getIntent().getBooleanExtra(EntriesListActivity.EXTRA_SHOWREAD, true);
 		iconBytes = getIntent().getByteArrayExtra(FeedData.FeedColumns.ICON);
+		feedName = getIntent().getStringExtra(FeedData.FeedColumns.NAME);
 		feedId = 0;
 		
 		Cursor entryCursor = getContentResolver().query(uri, null, null, null, null);
@@ -417,16 +420,16 @@ public class EntryActivity extends Activity {
 					feedId = _feedId;
 				}
 				
-				if (canShowIcon) {
-					if (iconBytes == null || iconBytes.length == 0) {
-						Cursor iconCursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(Integer.toString(feedId)), new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.ICON}, null, null, null);
-						
-						if (iconCursor.moveToFirst()) {
-							iconBytes = iconCursor.getBlob(1);
-						}
-						iconCursor.close();
+				if (feedName == null || (canShowIcon && (iconBytes == null || iconBytes.length == 0))) {
+					Cursor feedCursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(Integer.toString(feedId)), new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL, FeedData.FeedColumns.ICON}, null, null, null);
+					if (feedCursor.moveToFirst()) {
+						feedName = feedCursor.isNull(1) ? feedCursor.getString(2) : feedCursor.getString(1);
+						iconBytes = feedCursor.getBlob(3);
 					}
-					
+					feedCursor.close();
+				}
+
+				if (canShowIcon) {
 					Drawable icon = null;
 					if (iconBytes != null && iconBytes.length > 0) {
 						int bitmapSizeInDip = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, getResources().getDisplayMetrics());
@@ -455,6 +458,10 @@ public class EntryActivity extends Activity {
 				StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(DateFormat.getTimeFormat(this).format(date));
 				
 				String author = entryCursor.getString(authorPosition);
+				
+				if (feedName != null && feedName.length() > 0) {
+					dateStringBuilder.append(' ').append(feedName);
+				}
 				
 				if (author != null && author.length() > 0) {
 					dateStringBuilder.append(BRACKET).append(author).append(')');
