@@ -71,9 +71,9 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	private static final String SQLREAD = "length(readdate) ASC, ";
 	
-	public static final String READDATEISNULL = "readdate is null";
+	public static final String READDATEISNULL = FeedData.EntryColumns.READDATE+Strings.DB_ISNULL;
 
-	private boolean showRead;
+	private boolean hideRead;
 	
 	private Activity context;
 	
@@ -95,9 +95,9 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	private DateFormat timeFormat;
 	
-	public EntriesListAdapter(Activity context, Uri uri, boolean showFeedInfo, boolean autoreload) {
-		super(context, R.layout.entrylistitem, createManagedCursor(context, uri, true), autoreload);
-		showRead = true;
+	public EntriesListAdapter(Activity context, Uri uri, boolean showFeedInfo, boolean autoreload, boolean hideRead) {
+		super(context, R.layout.entrylistitem, createManagedCursor(context, uri, hideRead), autoreload);
+		this.hideRead = hideRead;
 		this.context = context;
 		this.uri = uri;
 		
@@ -200,21 +200,21 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			textView.setEnabled(false);
 		}
 	}
-
-	public void showRead(boolean showRead) {
-		if (showRead != this.showRead) {
+	
+	public boolean isHideRead() {
+		return hideRead;
+	}
+	
+	public void setHideRead(boolean hideRead) {
+		if (hideRead != this.hideRead) {
 			context.stopManagingCursor(getCursor());
-			changeCursor(createManagedCursor(context, uri, showRead));
-			this.showRead = showRead;
+			changeCursor(createManagedCursor(context, uri, hideRead));
+			this.hideRead = hideRead;
 		}
 	}
 	
-	public boolean isShowRead() {
-		return showRead;
-	}
-	
-	private static Cursor createManagedCursor(Activity context, Uri uri, boolean showRead) {
-		return context.managedQuery(uri, null, showRead ? null : READDATEISNULL, null, new StringBuilder(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Strings.SETTINGS_PRIORITIZE, false) ? SQLREAD : Strings.EMPTY).append(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).toString());
+	private static Cursor createManagedCursor(Activity context, Uri uri, boolean hideRead) {
+		return context.managedQuery(uri, null, hideRead ? READDATEISNULL : null, null, new StringBuilder(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Strings.SETTINGS_PRIORITIZE, false) ? SQLREAD : Strings.EMPTY).append(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).toString());
 	}
 	
 	public void markAsRead() {

@@ -41,7 +41,7 @@ import de.shandschuh.sparserss.provider.FeedData;
 public class FeedConfigActivity extends Activity {
 	private static final String WASACTIVE = "wasactive";
 	
-	private static final String[] PROJECTION = new String[] {FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL, FeedData.FeedColumns.WIFIONLY, FeedData.FeedColumns.IMPOSE_USERAGENT};
+	private static final String[] PROJECTION = new String[] {FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL, FeedData.FeedColumns.WIFIONLY, FeedData.FeedColumns.IMPOSE_USERAGENT, FeedData.FeedColumns.HIDE_READ};
 	
 	private EditText nameEditText;
 	
@@ -50,6 +50,8 @@ public class FeedConfigActivity extends Activity {
 	private CheckBox refreshOnlyWifiCheckBox;
 	
 	private CheckBox standardUseragentCheckBox;
+	
+	private CheckBox hideReadCheckBox;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class FeedConfigActivity extends Activity {
 		urlEditText = (EditText) findViewById(R.id.feed_url);
 		refreshOnlyWifiCheckBox = (CheckBox) findViewById(R.id.wifionlycheckbox);
 		standardUseragentCheckBox = (CheckBox) findViewById(R.id.standarduseragentcheckbox);
+		hideReadCheckBox = (CheckBox) findViewById(R.id.hidereadcheckbox);
 		
 		if (intent.getAction().equals(Intent.ACTION_INSERT)) {
 			setTitle(R.string.newfeed_title);
@@ -87,6 +90,7 @@ public class FeedConfigActivity extends Activity {
 						
 						values.put(FeedData.FeedColumns.WIFIONLY, refreshOnlyWifiCheckBox.isChecked() ? 1 : 0);
 						values.put(FeedData.FeedColumns.IMPOSE_USERAGENT, standardUseragentCheckBox.isChecked() ? 0 : 1);
+						values.put(FeedData.FeedColumns.HIDE_READ, hideReadCheckBox.isChecked() ? 1 : 0);
 						values.put(FeedData.FeedColumns.URL, url);
 						values.put(FeedData.FeedColumns.ERROR, (String) null);
 						
@@ -112,6 +116,7 @@ public class FeedConfigActivity extends Activity {
 					urlEditText.setText(cursor.getString(1));
 					refreshOnlyWifiCheckBox.setChecked(cursor.getInt(2) == 1);
 					standardUseragentCheckBox.setChecked(cursor.isNull(3) || cursor.getInt(3) == 0);
+					hideReadCheckBox.setChecked(cursor.getInt(4) == 1);
 					cursor.close();
 				} else {
 					cursor.close();
@@ -144,6 +149,7 @@ public class FeedConfigActivity extends Activity {
 						values.put(FeedData.FeedColumns.FETCHMODE, 0);
 						values.put(FeedData.FeedColumns.WIFIONLY, refreshOnlyWifiCheckBox.isChecked() ? 1 : 0);
 						values.put(FeedData.FeedColumns.IMPOSE_USERAGENT, standardUseragentCheckBox.isChecked() ? 0 : 1);
+						values.put(FeedData.FeedColumns.HIDE_READ, hideReadCheckBox.isChecked() ? 1 : 0);
 						values.put(FeedData.FeedColumns.ERROR, (String) null);
 						getContentResolver().update(getIntent().getData(), values, null, null);
 						

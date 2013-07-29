@@ -29,8 +29,10 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ListActivity;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,6 +40,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.util.TypedValue;
 import android.view.ContextMenu;
@@ -61,15 +64,18 @@ public class EntriesListActivity extends ListActivity {
 	
 	private static final int CONTEXTMENU_COPYURL = 9;
 	
-	public static final String EXTRA_SHOWREAD = "show_read";
-	
 	public static final String EXTRA_SHOWFEEDINFO = "show_feedinfo";
 	
 	public static final String EXTRA_AUTORELOAD = "autoreload";
 	
+	private static final String FAVORITES = "favorites";
+	
+	private static final String ALLENTRIES = "allentries";
+	
 	private static final String[] FEED_PROJECTION = {FeedData.FeedColumns.NAME,
 		FeedData.FeedColumns.URL,
-		FeedData.FeedColumns.ICON
+		FeedData.FeedColumns.ICON,
+		FeedData.FeedColumns.HIDE_READ
 	};
 	
 	private Uri uri;
@@ -77,6 +83,10 @@ public class EntriesListActivity extends ListActivity {
 	private EntriesListAdapter entriesListAdapter;
 	
 	private byte[] iconBytes;
+	
+	private long feedId;
+	
+	private boolean hideRead;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +102,8 @@ public class EntriesListActivity extends ListActivity {
 		
 		Intent intent = getIntent();
 		
-		long feedId = intent.getLongExtra(FeedData.FeedColumns._ID, 0);
+		feedId = intent.getLongExtra(FeedData.FeedColumns._ID, 0);
+		uri = intent.getData();
 		
 		if (feedId > 0) {
 			Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(feedId), FEED_PROJECTION, null, null, null);
@@ -100,8 +111,11 @@ public class EntriesListActivity extends ListActivity {
 			if (cursor.moveToFirst()) {
 				title = cursor.isNull(0) ? cursor.getString(1) : cursor.getString(0);
 				iconBytes = cursor.getBlob(2);
+				hideRead = cursor.getInt(3) == 1;
 			}
 			cursor.close();
+		} else {
+			hideRead = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(new StringBuilder(uri.equals(FeedData.EntryColumns.FAVORITES_CONTENT_URI) ? FAVORITES : ALLENTRIES).append('.').append(FeedData.FeedColumns.HIDE_READ).toString(), false);
 		}
 		
 		if (!MainTabActivity.POSTGINGERBREAD && iconBytes != null && iconBytes.length > 0) { // we cannot insert the icon here because it would be overwritten, but we have to reserve the icon here
@@ -112,9 +126,7 @@ public class EntriesListActivity extends ListActivity {
 		
 		setContentView(R.layout.entries);
 		
-		uri = intent.getData();
-		
-		entriesListAdapter = new EntriesListAdapter(this, uri, intent.getBooleanExtra(EXTRA_SHOWFEEDINFO, false), intent.getBooleanExtra(EXTRA_AUTORELOAD, false));
+		entriesListAdapter = new EntriesListAdapter(this, uri, intent.getBooleanExtra(EXTRA_SHOWFEEDINFO, false), intent.getBooleanExtra(EXTRA_AUTORELOAD, false), hideRead);
 		setListAdapter(entriesListAdapter);
 		
 		if (title != null) {
@@ -158,7 +170,7 @@ public class EntriesListActivity extends ListActivity {
 		textView.setEnabled(false);
 		view.findViewById(android.R.id.text2).setEnabled(false);
 		entriesListAdapter.neutralizeReadState();
-		startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(uri, id)).putExtra(EXTRA_SHOWREAD, entriesListAdapter.isShowRead()).putExtra(FeedData.FeedColumns.ICON, iconBytes));
+		startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(uri, id)).putExtra(FeedData.FeedColumns.HIDE_READ, entriesListAdapter.isHideRead()).putExtra(FeedData.FeedColumns.ICON, iconBytes));
 	}
 	
 	@Override
@@ -171,6 +183,12 @@ public class EntriesListActivity extends ListActivity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		if (menu != null) {
 			menu.setGroupVisible(R.id.menu_group_0, entriesListAdapter.getCount() > 0);
+			if (hideRead) {
+				menu.findItem(R.id.menu_hideread).setChecked(true).setTitle(R.string.contextmenu_showread).setIcon(android.R.drawable.ic_menu_view);
+			} else {
+				menu.findItem(R.id.menu_hideread).setChecked(false).setTitle(R.string.contextmenu_hideread).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+			}
+			
 		}
 		return true;
 	}
@@ -196,13 +214,15 @@ public class EntriesListActivity extends ListActivity {
 				break;
 			}
 			case R.id.menu_hideread: {
-				if (item.isChecked()) {
+				hideRead = !entriesListAdapter.isHideRead();
+				if (hideRead) {
 					item.setChecked(false).setTitle(R.string.contextmenu_hideread).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
-					entriesListAdapter.showRead(true);
+					entriesListAdapter.setHideRead(true);
 				} else {
 					item.setChecked(true).setTitle(R.string.contextmenu_showread).setIcon(android.R.drawable.ic_menu_view);
-					entriesListAdapter.showRead(false);
+					entriesListAdapter.setHideRead(false);
 				}
+				setHideReadFromUri();
 				break;
 			}
 			case R.id.menu_deleteread: {
@@ -276,5 +296,18 @@ public class EntriesListActivity extends ListActivity {
 		return true;
 	}
 	
+	private void setHideReadFromUri() {
+		if (feedId > 0) {
+			ContentValues values = new ContentValues();
+			
+			values.put(FeedData.FeedColumns.HIDE_READ, hideRead);
+			getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(feedId), values, null, null);
+		} else {
+			Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+			
+			editor.putBoolean(new StringBuilder(uri.equals(FeedData.EntryColumns.FAVORITES_CONTENT_URI) ? FAVORITES : ALLENTRIES).append('.').append(FeedData.FeedColumns.HIDE_READ).toString(), hideRead);
+			editor.commit();
+		}
+	}
 }
 

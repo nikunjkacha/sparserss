@@ -149,7 +149,7 @@ public class EntryActivity extends Activity {
 	
 	boolean favorite;
 	
-	private boolean showRead;
+	private boolean hideRead;
 	
 	private boolean canShowIcon;
 	
@@ -224,7 +224,7 @@ public class EntryActivity extends Activity {
 		
 		uri = getIntent().getData();
 		parentUri = FeedData.EntryColumns.PARENT_URI(uri.getPath());
-		showRead = getIntent().getBooleanExtra(EntriesListActivity.EXTRA_SHOWREAD, true);
+		hideRead = getIntent().getBooleanExtra(FeedData.FeedColumns.HIDE_READ, false);
 		iconBytes = getIntent().getByteArrayExtra(FeedData.FeedColumns.ICON);
 		feedId = 0;
 		
@@ -619,7 +619,7 @@ public class EntryActivity extends Activity {
 	private void setupButton(ImageButton button, final boolean successor, long date) {
 		StringBuilder queryString = new StringBuilder(DATE).append(date).append(AND_ID).append(successor ? '>' : '<').append(_id).append(')').append(OR_DATE).append(successor ? '<' : '>').append(date);
 		
-		if (!showRead) {
+		if (hideRead) {
 			queryString.append(Strings.DB_AND).append(EntriesListAdapter.READDATEISNULL);
 		}
 
