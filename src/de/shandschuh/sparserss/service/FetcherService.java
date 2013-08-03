@@ -98,6 +98,9 @@ public class FetcherService extends IntentService {
 	/* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
 	private static final Pattern feedLinkPattern = Pattern.compile("[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>");
 	
+	/* Case insensitive */
+	private static final Pattern feedIconPattern = Pattern.compile("[.]*<link[^>]* (rel=(\"shortcut icon\"|\"icon\"|icon)[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* rel=(\"shortcut icon\"|\"icon\"|icon))[^>]*>", Pattern.CASE_INSENSITIVE);
+	
 	private NotificationManager notificationManager;
 	
 	private static SharedPreferences preferences = null;
@@ -259,6 +262,8 @@ public class FetcherService extends IntentService {
 				
 				int fetchMode = cursor.getInt(fetchmodePosition);
 				
+				String iconUrl = null;
+				
 				handler.init(new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl);
 				if (fetchMode == 0) {
 					if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
@@ -266,52 +271,45 @@ public class FetcherService extends IntentService {
 						
 						String line = null;
 						
-						int posStart = -1;
+						boolean linkFound = false;
+						
+						boolean iconFound = false;
 						
 						while ((line = reader.readLine()) != null) {
 							if (line.indexOf(HTML_BODY) > -1) {
 								break;
 							} else {
-								Matcher matcher = feedLinkPattern.matcher(line);
-								
-								if (matcher.find()) { // not "while" as only one link is needed
-									line = matcher.group();
-									posStart = line.indexOf(HREF);
+								if (!linkFound) {
+									Matcher matcher = feedLinkPattern.matcher(line);
 									
-									if (posStart > -1) {
-										String url = line.substring(posStart+6, line.indexOf('"', posStart+10)).replace(Strings.AMP_SG, Strings.AMP);
+									if (matcher.find()) { // not "while" as only one link is needed
+										String url = getHref(matcher.group(), feedUrl);
 										
-										ContentValues values = new ContentValues();
-										
-										if (url.startsWith(Strings.SLASH)) {
-											int index = feedUrl.indexOf('/', 8);
+										if (url != null) {
+											ContentValues values = new ContentValues();
 											
-											if (index > -1) {
-												url = feedUrl.substring(0, index)+url;
-											} else {
-												url = feedUrl+url;
-											}
-										} else if (!url.startsWith(Strings.HTTP) && !url.startsWith(Strings.HTTPS)) {
-											url = new StringBuilder(feedUrl).append('/').append(url).toString();
+											values.put(FeedData.FeedColumns.URL, url);
+											context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+											redirectHost = connection.getURL().getHost();
+											connection.disconnect();
+											connection = setupConnection(url, imposeUserAgent, followHttpHttpsRedirects);
+											contentType = connection.getContentType();
+											linkFound = true;
 										}
-										values.put(FeedData.FeedColumns.URL, url);
-										context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
-										redirectHost = connection.getURL().getHost();
-										connection.disconnect();
-										connection = setupConnection(url, imposeUserAgent, followHttpHttpsRedirects);
-										contentType = connection.getContentType();
-										break;
 									}
+								}
+								if (!iconFound) {
+									Matcher matcher = feedIconPattern.matcher(line);
+									
+									if (matcher.find()) { // not "while" as only one link is needed
+										iconFound = (iconUrl = getHref(matcher.group(), feedUrl)) != null;
+									}
+								}
+								if (iconFound && linkFound) {
+									break;
 								}
 							}
 						}
-						if (posStart == -1) { // this indicates a badly configured feed
-							redirectHost = connection.getURL().getHost();
-							connection.disconnect();
-							connection = setupConnection(feedUrl, imposeUserAgent, followHttpHttpsRedirects);
-							contentType = connection.getContentType();
-						}
-						
 					}
 					
 					if (contentType != null) {
@@ -367,7 +365,7 @@ public class FetcherService extends IntentService {
 				byte[] iconBytes = cursor.getBlob(iconPosition);
 				
 				if (iconBytes == null) {
-					HttpURLConnection iconURLConnection = setupConnection(new URL(new StringBuilder(connection.getURL().getProtocol()).append(Strings.PROTOCOL_SEPARATOR).append(redirectHost).append(Strings.FILE_FAVICON).toString()), imposeUserAgent, followHttpHttpsRedirects);
+					HttpURLConnection iconURLConnection = setupConnection(new URL(iconUrl != null ? iconUrl : new StringBuilder(connection.getURL().getProtocol()).append(Strings.PROTOCOL_SEPARATOR).append(redirectHost).append(Strings.FILE_FAVICON).toString()), imposeUserAgent, followHttpHttpsRedirects);
 					
 					try {
 						iconBytes = getBytes(getConnectionInputStream(iconURLConnection));
@@ -481,6 +479,29 @@ public class FetcherService extends IntentService {
 			context.sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET).putExtra(Strings.COUNT, result));
 		}
 		return result;
+	}
+		
+	private static String getHref(String line, String feedUrl) {
+		int posStart = line.indexOf(HREF);
+		
+		if (posStart > -1) {
+			String url = line.substring(posStart+6, line.indexOf('"', posStart+10)).replace(Strings.AMP_SG, Strings.AMP);
+			
+			if (url.startsWith(Strings.SLASH)) {
+				int index = feedUrl.indexOf('/', 8);
+				
+				if (index > -1) {
+					url = feedUrl.substring(0, index)+url;
+				} else {
+					url = feedUrl+url;
+				}
+			} else if (!url.startsWith(Strings.HTTP) && !url.startsWith(Strings.HTTPS)) {
+				url = new StringBuilder(feedUrl).append('/').append(url).toString();
+			}
+			return url;
+		} else {
+			return null;
+		}
 	}
 	
 	private static final HttpURLConnection setupConnection(String url, boolean imposeUseragent, boolean followHttpHttpsRedirects) throws IOException, NoSuchAlgorithmException, KeyManagementException {
