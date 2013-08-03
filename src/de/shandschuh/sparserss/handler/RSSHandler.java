@@ -158,7 +158,7 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final StringBuilder DB_FAVORITE  = new StringBuilder(" AND (").append(Strings.DB_EXCUDEFAVORITE).append(')');
 
-	private static final Pattern imgPattern = Pattern.compile("<img src=\\s*['\"]([^'\"]+)['\"][^>]*>"); // middle () is group 1; s* is important for non-whitespaces; ' also usable
+	private static final Pattern imgPattern = Pattern.compile("<img src=\\s*['\"]([^'\"]+)['\"][^>]*>", Pattern.CASE_INSENSITIVE); // middle () is group 1; s* is important for non-whitespaces; ' also usable
 	
 	private Context context;
 	

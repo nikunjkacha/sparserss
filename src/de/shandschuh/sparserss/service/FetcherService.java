@@ -96,7 +96,7 @@ public class FetcherService extends IntentService {
 	private static final String GZIP = "gzip";
 	
 	/* Allow different positions of the "rel" attribute w.r.t. the "href" attribute */
-	private static final Pattern feedLinkPattern = Pattern.compile("[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>");
+	private static final Pattern feedLinkPattern = Pattern.compile("[.]*<link[^>]* ((rel=alternate|rel=\"alternate\")[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* (rel=alternate|rel=\"alternate\"))[^>]*>", Pattern.CASE_INSENSITIVE);
 	
 	/* Case insensitive */
 	private static final Pattern feedIconPattern = Pattern.compile("[.]*<link[^>]* (rel=(\"shortcut icon\"|\"icon\"|icon)[^>]* href=\"[^\"]*\"|href=\"[^\"]*\"[^>]* rel=(\"shortcut icon\"|\"icon\"|icon))[^>]*>", Pattern.CASE_INSENSITIVE);
