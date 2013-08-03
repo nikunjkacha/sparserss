@@ -223,7 +223,7 @@ public class MainTabActivity extends TabActivity {
 						onCreateOptionsMenu(menu);
 					}
 					SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mainTabActivity).edit();
-					editor.putString(Strings.LAST_TAB, tabId);
+					editor.putString(Strings.PREFERENCE_LASTTAB, tabId);
 					editor.commit();
 				}
 			});
@@ -245,7 +245,7 @@ public class MainTabActivity extends TabActivity {
 			}
 			getTabWidget().setVisibility(View.VISIBLE);
 
-			String lastTab = PreferenceManager.getDefaultSharedPreferences(this).getString(Strings.LAST_TAB, TAG_NORMAL);
+			String lastTab = PreferenceManager.getDefaultSharedPreferences(this).getString(Strings.PREFERENCE_LASTTAB, TAG_NORMAL);
 			boolean tabFound = false;
 			for(int i = 0; i < tabHost.getTabWidget().getChildCount(); ++i) {
 				tabHost.setCurrentTab(i);

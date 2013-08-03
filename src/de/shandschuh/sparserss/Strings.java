@@ -142,6 +142,8 @@ public final class Strings {
 	
 	public static final String PREFERENCE_LASTSCHEDULEDREFRESH = "lastscheduledrefresh";
 	
+	public static final String PREFERENCE_LASTTAB = "lasttab";
+	
 	public static final String HTML_LT = "&lt;";
 	
 	public static final String HTML_GT = "&gt;";
@@ -180,6 +182,4 @@ public final class Strings {
 	
 	public static final String SCHEDULED = "scheduled";
 	
-	public static final String LAST_TAB = "lasttab";
-
 }
