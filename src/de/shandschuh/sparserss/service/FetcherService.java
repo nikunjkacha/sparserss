@@ -271,44 +271,41 @@ public class FetcherService extends IntentService {
 						
 						String line = null;
 						
-						boolean linkFound = false;
-						
-						boolean iconFound = false;
+						String newFeedUrl = null;
 						
 						while ((line = reader.readLine()) != null) {
 							if (line.indexOf(HTML_BODY) > -1) {
 								break;
 							} else {
-								if (!linkFound) {
+								if (newFeedUrl == null) {
 									Matcher matcher = feedLinkPattern.matcher(line);
 									
 									if (matcher.find()) { // not "while" as only one link is needed
-										String url = getHref(matcher.group(), feedUrl);
-										
-										if (url != null) {
-											ContentValues values = new ContentValues();
-											
-											values.put(FeedData.FeedColumns.URL, url);
-											context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
-											redirectHost = connection.getURL().getHost();
-											connection.disconnect();
-											connection = setupConnection(url, imposeUserAgent, followHttpHttpsRedirects);
-											contentType = connection.getContentType();
-											linkFound = true;
-										}
+										newFeedUrl = getHref(matcher.group(), feedUrl);
 									}
 								}
-								if (!iconFound) {
+								if (iconUrl == null) {
 									Matcher matcher = feedIconPattern.matcher(line);
 									
 									if (matcher.find()) { // not "while" as only one link is needed
-										iconFound = (iconUrl = getHref(matcher.group(), feedUrl)) != null;
+										iconUrl = getHref(matcher.group(), feedUrl);
 									}
 								}
-								if (iconFound && linkFound) {
+								if (newFeedUrl != null && iconUrl != null) {
 									break;
 								}
 							}
+						}
+						
+						if (newFeedUrl != null) {
+							ContentValues values = new ContentValues();
+							
+							values.put(FeedData.FeedColumns.URL, newFeedUrl);
+							context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+							redirectHost = connection.getURL().getHost();
+							connection.disconnect();
+							connection = setupConnection(newFeedUrl, imposeUserAgent, followHttpHttpsRedirects);
+							contentType = connection.getContentType();
 						}
 					}
 					
