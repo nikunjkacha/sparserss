@@ -298,15 +298,16 @@ public class FetcherService extends IntentService {
 						}
 						
 						if (newFeedUrl != null) {
-							ContentValues values = new ContentValues();
-							
-							values.put(FeedData.FeedColumns.URL, newFeedUrl);
-							context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 							redirectHost = connection.getURL().getHost();
 							connection.disconnect();
 							connection = setupConnection(newFeedUrl, imposeUserAgent, followHttpHttpsRedirects);
 							contentType = connection.getContentType();
 							handler.initFeedBaseUrl(newFeedUrl);
+							
+							ContentValues values = new ContentValues();
+							
+							values.put(FeedData.FeedColumns.URL, newFeedUrl);
+							context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 						}
 					}
 					
