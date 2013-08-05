@@ -268,14 +268,7 @@ public class RSSHandler extends DefaultHandler {
 		newCount = 0;
 		feedRefreshed = false;
 		feedTitle = title;
-		
-		int index = url.indexOf('/', 8); // this also covers https://
-		
-		if (index > -1) {
-			feedBaseUrl = url.substring(0, index);
-		} else {
-			feedBaseUrl = null;
-		}
+		initFeedBaseUrl(url);
 		this.title = null;
 		this.dateStringBuilder = null;
 		this.entryLink = null;
@@ -309,6 +302,16 @@ public class RSSHandler extends DefaultHandler {
 		enclosureType = null;
 		enclosureLengthTagEntered = false;
 		enclosureLength = null;
+	}
+	
+	public void initFeedBaseUrl(String url) {
+		int index = url.indexOf('/', 8); // this also covers https://
+		
+		if (index > -1) {
+			feedBaseUrl = url.substring(0, index);
+		} else {
+			feedBaseUrl = null;
+		}
 	}
 
 	@Override

@@ -306,6 +306,7 @@ public class FetcherService extends IntentService {
 							connection.disconnect();
 							connection = setupConnection(newFeedUrl, imposeUserAgent, followHttpHttpsRedirects);
 							contentType = connection.getContentType();
+							handler.initFeedBaseUrl(newFeedUrl);
 						}
 					}
 					
