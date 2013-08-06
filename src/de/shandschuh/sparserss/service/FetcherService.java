@@ -364,7 +364,35 @@ public class FetcherService extends IntentService {
 				byte[] iconBytes = cursor.getBlob(iconPosition);
 				
 				if (iconBytes == null) {
-					HttpURLConnection iconURLConnection = setupConnection(new URL(iconUrl != null ? iconUrl : new StringBuilder(connection.getURL().getProtocol()).append(Strings.PROTOCOL_SEPARATOR).append(redirectHost).append(Strings.FILE_FAVICON).toString()), imposeUserAgent, followHttpHttpsRedirects);
+					if (iconUrl == null) {
+						String baseUrl = new StringBuilder(connection.getURL().getProtocol()).append(Strings.PROTOCOL_SEPARATOR).append(redirectHost).toString();
+						HttpURLConnection iconURLConnection = setupConnection(new URL(baseUrl), imposeUserAgent, followHttpHttpsRedirects);
+						try {
+							BufferedReader reader = new BufferedReader(new InputStreamReader(getConnectionInputStream(iconURLConnection)));
+							String line = null;
+							while ((line = reader.readLine()) != null) {
+								if (line.indexOf(HTML_BODY) > -1) {
+									break;
+								} else {
+									Matcher matcher = feedIconPattern.matcher(line);
+									if (matcher.find()) { // not "while" as only one link is needed
+										iconUrl = getHref(matcher.group(), baseUrl);
+										if (iconUrl != null) {
+											break;
+										}
+									}
+								}
+							}
+						} catch (Exception e) {
+						} finally {
+							iconURLConnection.disconnect();
+						}
+
+						if (iconUrl == null) {
+							iconUrl = new StringBuilder(baseUrl).append(Strings.FILE_FAVICON).toString();
+						}
+					}
+					HttpURLConnection iconURLConnection = setupConnection(new URL(iconUrl), imposeUserAgent, followHttpHttpsRedirects);
 					
 					try {
 						iconBytes = getBytes(getConnectionInputStream(iconURLConnection));
@@ -480,22 +508,22 @@ public class FetcherService extends IntentService {
 		return result;
 	}
 		
-	private static String getHref(String line, String feedUrl) {
+	private static String getHref(String line, String baseUrl) {
 		int posStart = line.indexOf(HREF);
 		
 		if (posStart > -1) {
 			String url = line.substring(posStart+6, line.indexOf('"', posStart+10)).replace(Strings.AMP_SG, Strings.AMP);
 			
 			if (url.startsWith(Strings.SLASH)) {
-				int index = feedUrl.indexOf('/', 8);
+				int index = baseUrl.indexOf('/', 8);
 				
 				if (index > -1) {
-					url = feedUrl.substring(0, index)+url;
+					url = baseUrl.substring(0, index)+url;
 				} else {
-					url = feedUrl+url;
+					url = baseUrl+url;
 				}
 			} else if (!url.startsWith(Strings.HTTP) && !url.startsWith(Strings.HTTPS)) {
-				url = new StringBuilder(feedUrl).append('/').append(url).toString();
+				url = new StringBuilder(baseUrl).append('/').append(url).toString();
 			}
 			return url;
 		} else {
