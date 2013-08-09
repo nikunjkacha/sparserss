@@ -441,10 +441,10 @@ public class EntryActivity extends Activity {
 							icon = new BitmapDrawable(bitmap);
 						}
 					}
-					if (icon == null) {
-						icon = getResources().getDrawable(de.shandschuh.sparserss.R.drawable.icon);
-					}
 					if (MainTabActivity.POSTGINGERBREAD) {
+						if (icon == null) {
+							icon = getResources().getDrawable(de.shandschuh.sparserss.R.drawable.icon);
+						}
 						CompatibilityHelper.setActionBarDrawable(this, icon);
 					} else {
 						setFeatureDrawable(Window.FEATURE_LEFT_ICON, icon);
