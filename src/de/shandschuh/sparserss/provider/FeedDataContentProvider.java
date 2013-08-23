@@ -370,6 +370,7 @@ public class FeedDataContentProvider extends ContentProvider {
 		}
 		if (count > 0) {
 			getContext().getContentResolver().notifyChange(uri, null);
+			getContext().sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET));
 		}
 		return count;
 	}
