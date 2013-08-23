@@ -626,7 +626,9 @@ public class RSSOverview extends ListActivity implements Requeryable {
 
 	@Override
 	public void requery() {
-		listAdapter.notifyDataSetChanged();
+		if (listAdapter != null) {
+			listAdapter.notifyDataSetChanged();
+		}
 	}
 	
 }
