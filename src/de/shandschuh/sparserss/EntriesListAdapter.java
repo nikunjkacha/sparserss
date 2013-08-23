@@ -207,10 +207,20 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	public void setHideRead(boolean hideRead) {
 		if (hideRead != this.hideRead) {
-			context.stopManagingCursor(getCursor());
-			changeCursor(createManagedCursor(context, uri, hideRead));
 			this.hideRead = hideRead;
+			reloadCursor();
 		}
+	}
+	
+	private void reloadCursor() {
+		markedAsRead.clear();
+		markedAsUnread.clear();
+		favorited.clear();
+		unfavorited.clear();
+		context.stopManagingCursor(getCursor());
+		forcedState = STATE_NEUTRAL;
+		changeCursor(createManagedCursor(context, uri, hideRead));
+		notifyDataSetInvalidated();
 	}
 	
 	private static Cursor createManagedCursor(Activity context, Uri uri, boolean hideRead) {
@@ -218,10 +228,14 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	}
 	
 	public void markAsRead() {
-		forcedState = STATE_ALLREAD;
-		markedAsRead.clear();
-		markedAsUnread.clear();
-		notifyDataSetInvalidated();
+		if (hideRead) {
+			reloadCursor(); // well, the cursor should be empty
+		} else {
+			forcedState = STATE_ALLREAD;
+			markedAsRead.clear();
+			markedAsUnread.clear();
+			notifyDataSetInvalidated();
+		}
 	}
 	
 	public void markAsUnread() {
@@ -236,9 +250,13 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	}
 
 	public void markAsRead(long id) {
-		markedAsRead.add(id);
-		markedAsUnread.remove(id);
-		notifyDataSetInvalidated();
+		if (hideRead) {
+			reloadCursor();
+		} else {
+			markedAsRead.add(id);
+			markedAsUnread.remove(id);
+			notifyDataSetInvalidated();
+		}
 	}
 
 	public void markAsUnread(long id) {
