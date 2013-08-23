@@ -55,7 +55,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import de.shandschuh.sparserss.provider.FeedData;
 
-public class EntriesListActivity extends ListActivity {
+public class EntriesListActivity extends ListActivity implements Requeryable {
 	private static final int CONTEXTMENU_MARKASREAD_ID = 6;
 	
 	private static final int CONTEXTMENU_MARKASUNREAD_ID = 7;
@@ -309,6 +309,13 @@ public class EntriesListActivity extends ListActivity {
 			
 			editor.putBoolean(new StringBuilder(uri.equals(FeedData.EntryColumns.FAVORITES_CONTENT_URI) ? FAVORITES : ALLENTRIES).append('.').append(FeedData.FeedColumns.HIDE_READ).toString(), hideRead);
 			editor.commit();
+		}
+	}
+
+	@Override
+	public void requery() {
+		if (entriesListAdapter != null) {
+			entriesListAdapter.reloadCursor();
 		}
 	}
 }

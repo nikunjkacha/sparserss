@@ -65,7 +65,7 @@ import de.shandschuh.sparserss.provider.FeedData;
 import de.shandschuh.sparserss.provider.OPML;
 import de.shandschuh.sparserss.service.RefreshService;
 
-public class RSSOverview extends ListActivity {
+public class RSSOverview extends ListActivity implements Requeryable {
 	private static final int DIALOG_ERROR_FEEDIMPORT = 3;
 	
 	private static final int DIALOG_ERROR_FEEDEXPORT = 4;
@@ -622,6 +622,11 @@ public class RSSOverview extends ListActivity {
 			listAdapter.setFeedSortEnabled(enabled);
 			feedSort = enabled;
 		}
+	}
+
+	@Override
+	public void requery() {
+		listAdapter.notifyDataSetChanged();
 	}
 	
 }

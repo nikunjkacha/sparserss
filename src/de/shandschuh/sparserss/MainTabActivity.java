@@ -25,6 +25,8 @@
 
 package de.shandschuh.sparserss;
 
+import java.util.Vector;
+
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -93,6 +95,8 @@ public class MainTabActivity extends TabActivity {
 	
 	private boolean progressBarVisible;
 	
+	private Vector<String> visitedTabs;
+	
 	public void onCreate(Bundle savedInstanceState) {
 		if (isLightTheme(this)) {
 			setTheme(R.style.Theme_Light);
@@ -105,6 +109,7 @@ public class MainTabActivity extends TabActivity {
 		setContentView(R.layout.tabs);
 		INSTANCE = this;
 		hasContent = false;
+		visitedTabs = new Vector<String>(3);
 		if (getPreferences(MODE_PRIVATE).getBoolean(Strings.PREFERENCE_LICENSEACCEPTED, false)) {
 			setContent();
 		} else {
@@ -225,12 +230,33 @@ public class MainTabActivity extends TabActivity {
 					SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(mainTabActivity).edit();
 					editor.putString(Strings.PREFERENCE_LASTTAB, tabId);
 					editor.commit();
+					setCurrentTab(tabId);
 				}
 			});
 			if (menu != null) {
 				menu.clear();
 				onCreateOptionsMenu(menu);
 			}
+		} else {
+			tabHost.setOnTabChangedListener(new OnTabChangeListener() {
+				@Override
+				public void onTabChanged(String tabId) {
+					setCurrentTab(tabId);
+				}
+			});
+		}
+	}
+	
+	private void setCurrentTab(String currentTab) {
+		if (visitedTabs.contains(currentTab)) {
+			// requery the tab but only if it has been shown already
+			Activity activity = getCurrentActivity();
+			
+			if (hasContent && activity != null) {
+				((Requeryable) activity).requery();
+			}
+		} else {
+			visitedTabs.add(currentTab);
 		}
 	}
 	

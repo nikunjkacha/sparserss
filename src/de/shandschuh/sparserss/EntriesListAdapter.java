@@ -212,7 +212,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		}
 	}
 	
-	private void reloadCursor() {
+	public void reloadCursor() {
 		markedAsRead.clear();
 		markedAsUnread.clear();
 		favorited.clear();
