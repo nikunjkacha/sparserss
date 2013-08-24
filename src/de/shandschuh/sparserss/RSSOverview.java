@@ -140,7 +140,7 @@ public class RSSOverview extends ListActivity implements Requeryable {
 			
 			private LayoutParams layoutParams;
 			
-			private int minY = 25; // is the header size --> needs to be changed
+			private int minY;
 			
 			private ListView listView = getListView();
 			
@@ -163,6 +163,7 @@ public class RSSOverview extends ListActivity implements Requeryable {
 										View sortView = item.findViewById(R.id.sortitem);
 										
 										if (sortView.getLeft() <= event.getX()) {
+											minY = getMinY(); // this has to be determined after the layouting process
 											item.setDrawingCacheEnabled(true);
 											dragedView.setImageBitmap(Bitmap.createBitmap(item.getDrawingCache()));
 											
@@ -214,6 +215,13 @@ public class RSSOverview extends ListActivity implements Requeryable {
 				} else {
 					return false;
 				}
+			}
+			
+			private int getMinY() {
+				int[] xy = new int[2];
+				
+				getListView().getLocationInWindow(xy);
+				return xy[1] - 25;
 			}
 		});
 		if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
