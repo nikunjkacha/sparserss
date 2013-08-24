@@ -726,7 +726,7 @@ public class RSSHandler extends DefaultHandler {
 	}
 	
 	private static String unescapeTitle(String title) {
-		String result = title.replace(Strings.AMP_SG, Strings.AMP).replaceAll(Strings.HTML_TAG_REGEX, Strings.EMPTY).replace(Strings.HTML_LT, Strings.LT).replace(Strings.HTML_GT, Strings.GT).replace(Strings.HTML_QUOT, Strings.QUOT).replace(Strings.HTML_APOSTROPHE, Strings.APOSTROPHE);
+		String result = title.replace(Strings.AMP_SG, Strings.AMP).replaceAll(Strings.HTML_TAG_REGEX, Strings.EMPTY).replace(Strings.HTML_LT, Strings.LT).replace(Strings.HTML_GT, Strings.GT).replace(Strings.HTML_QUOT, Strings.QUOT).replace(Strings.HTML_APOSTROPHE, Strings.APOSTROPHE).replace(Strings.HTML_APOS, Strings.APOSTROPHE);
 		
 		if (result.indexOf(ANDRHOMBUS) > -1) {
 			return Html.fromHtml(result, null, null).toString();

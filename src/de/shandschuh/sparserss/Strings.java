@@ -170,6 +170,8 @@ public final class Strings {
 	
 	public static final String HTML_APOSTROPHE = "&#39;";
 	
+	public static final String HTML_APOS = "&apos;";
+	
 	public static final String APOSTROPHE = "'";
 	
 	public static final String AMP = "&";
