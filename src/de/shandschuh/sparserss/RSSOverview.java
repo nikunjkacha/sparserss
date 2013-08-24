@@ -151,7 +151,7 @@ public class RSSOverview extends ListActivity implements Requeryable {
 					switch (action) {
 						case MotionEvent.ACTION_DOWN:
 						case MotionEvent.ACTION_MOVE: {
-							// this is the drag action
+							// this is the drag/move action
 							if (dragedItem == -1) {
 								dragedItem = listView.pointToPosition((int) event.getX(), (int) event.getY());
 								if (dragedItem > -1) {
@@ -168,13 +168,13 @@ public class RSSOverview extends ListActivity implements Requeryable {
 											dragedView.setImageBitmap(Bitmap.createBitmap(item.getDrawingCache()));
 											
 											layoutParams = new LayoutParams();
-											layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+											layoutParams.height = LayoutParams.WRAP_CONTENT;
 											layoutParams.gravity = Gravity.TOP;
 											layoutParams.y = (int) event.getY();
 											windowManager.addView(dragedView, layoutParams);
 										} else {
 											dragedItem = -1;
-											return false; // do not comsume
+											return false; // do not consume
 										}
 										
 									} else {
@@ -245,7 +245,7 @@ public class RSSOverview extends ListActivity implements Requeryable {
 			notificationManager.cancel(0);
 		}
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.feedoverview, menu);
@@ -278,8 +278,7 @@ public class RSSOverview extends ListActivity implements Requeryable {
 		}
 		return true;
 	}
-
-	@SuppressWarnings("deprecation")
+	
 	@Override
 	public boolean onMenuItemSelected(int featureId, final MenuItem item) {
 		setFeedSortEnabled(false);
@@ -306,7 +305,7 @@ public class RSSOverview extends ListActivity implements Requeryable {
 			}
 			case CONTEXTMENU_REFRESH_ID: {
 				final String id = Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id);
-
+				
 				ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 				
 				final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -538,7 +537,7 @@ public class RSSOverview extends ListActivity implements Requeryable {
 		values.putNull(FeedData.EntryColumns.READDATE);
 		return values;
 	}
-
+	
 	@Override
 	protected void onListItemClick(ListView listView, View view, int position, long id) {
 		setFeedSortEnabled(false);
@@ -548,7 +547,7 @@ public class RSSOverview extends ListActivity implements Requeryable {
 		intent.putExtra(FeedData.FeedColumns._ID, id);
 		startActivity(intent);
 	}
-
+	
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		Dialog dialog;
@@ -631,7 +630,7 @@ public class RSSOverview extends ListActivity implements Requeryable {
 			feedSort = enabled;
 		}
 	}
-
+	
 	@Override
 	public void requery() {
 		if (listAdapter != null) {
