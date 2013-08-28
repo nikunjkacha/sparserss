@@ -399,7 +399,7 @@ public class EntryActivity extends Activity {
 			if (entryCursor.isNull(readDatePosition)) {
 				getContentResolver().update(uri, values, new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null);
 			}
-			if (abstractText == null) {
+			if (abstractText == null || abstractText.trim().length() == 0) {
 				link = entryCursor.getString(linkPosition);
 				entryCursor.close();
 				finish();
