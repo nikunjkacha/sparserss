@@ -127,7 +127,11 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	public void bindView(View view, final Context context, Cursor cursor) {
 		TextView textView = (TextView) view.findViewById(android.R.id.text1);
 		
-		textView.setText(cursor.getString(titleColumnPosition));
+		String link = cursor.getString(linkColumn);
+		
+		String title = cursor.getString(titleColumnPosition);
+		
+		textView.setText(title == null || title.length() == 0 ? link : title);
 		
 		TextView dateTextView = (TextView) view.findViewById(android.R.id.text2);
 		
@@ -135,7 +139,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		
 		final long id = cursor.getLong(idColumn);
 		
-		view.setTag(cursor.getString(linkColumn));
+		view.setTag(link);
 		
 		final boolean favorite = !unfavorited.contains(id) && (cursor.getInt(favoriteColumn) == 1 || favorited.contains(id));
 		
@@ -190,7 +194,6 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			}
 			
 		} else {
-			textView.setText(cursor.getString(titleColumnPosition));
 			dateTextView.setText(new StringBuilder(dateFormat.format(date)).append(' ').append(timeFormat.format(date)));
 		}
 		

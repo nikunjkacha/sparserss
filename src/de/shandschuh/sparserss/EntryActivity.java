@@ -406,7 +406,11 @@ public class EntryActivity extends Activity {
 				finish();
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
 			} else {
-				setTitle(entryCursor.getString(titlePosition));
+				link = entryCursor.getString(linkPosition);
+				
+				String title = entryCursor.getString(titlePosition);
+				
+				setTitle(title == null || title.length() == 0 ? link : title);
 				if (titleTextView != null) {
 					titleTextView.requestFocus(); // restart ellipsize
 				}
@@ -530,8 +534,6 @@ public class EntryActivity extends Activity {
 					webView.setBackgroundColor(Color.BLACK);
 					content.setBackgroundColor(Color.BLACK);
 				}
-				
-				link = entryCursor.getString(linkPosition);
 				
 				if (link != null && link.length() > 0) {
 					urlButton.setEnabled(true);
