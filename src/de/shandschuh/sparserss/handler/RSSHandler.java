@@ -509,10 +509,10 @@ public class RSSHandler extends DefaultHandler {
 					values.put(FeedData.EntryColumns.DATE, entryDate.getTime());
 					values.putNull(FeedData.EntryColumns.READDATE);
 				}
-				values.put(FeedData.EntryColumns.TITLE, unescapeTitle(title.toString().trim()));
+				values.put(FeedData.EntryColumns.TITLE, unescapeString(title.toString().trim()));
 				
 				if (author != null) {
-					values.put(FeedData.EntryColumns.AUTHOR, author.toString());
+					values.put(FeedData.EntryColumns.AUTHOR, unescapeString(author.toString()));
 				}
 				
 				Vector<String> images = null;
@@ -725,8 +725,8 @@ public class RSSHandler extends DefaultHandler {
 		return null;
 	}
 	
-	private static String unescapeTitle(String title) {
-		String result = title.replace(Strings.AMP_SG, Strings.AMP).replaceAll(Strings.HTML_TAG_REGEX, Strings.EMPTY).replace(Strings.HTML_LT, Strings.LT).replace(Strings.HTML_GT, Strings.GT).replace(Strings.HTML_QUOT, Strings.QUOT).replace(Strings.HTML_APOSTROPHE, Strings.APOSTROPHE).replace(Strings.HTML_APOS, Strings.APOSTROPHE);
+	private static String unescapeString(String str) {
+		String result = str.replace(Strings.AMP_SG, Strings.AMP).replaceAll(Strings.HTML_TAG_REGEX, Strings.EMPTY).replace(Strings.HTML_LT, Strings.LT).replace(Strings.HTML_GT, Strings.GT).replace(Strings.HTML_QUOT, Strings.QUOT).replace(Strings.HTML_APOS, Strings.APOSTROPHE);
 		
 		if (result.indexOf(ANDRHOMBUS) > -1) {
 			return Html.fromHtml(result, null, null).toString();
